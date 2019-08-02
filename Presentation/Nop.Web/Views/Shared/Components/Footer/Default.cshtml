@@ -1,0 +1,54 @@
+﻿@model FooterModel
+@using Nop.Core
+@inject IWorkContext workContext;
+<div class="footer">
+    <div class="container">
+        <div class="footer-upper row">
+            <div class="col-md-4 footer-block information">
+                <div class="title">
+                    <strong>@T("Footer.Information")</strong>
+                </div>
+                <ul class="list-unstyled">
+                    @foreach (var topic in Model.Topics.Where(x => x.IncludeInFooterColumn1).ToList())
+                    {
+                        <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+                    }
+                    @if (Model.DisplayContactUsFooterItem)
+                    {
+                        <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-4 footer-block customer-service">
+                <div class="title">
+                    <strong>@T("Footer.CustomerService")</strong>
+                </div>
+                <ul class="list-unstyled">
+                    @if (Model.NewsEnabled && Model.DisplayNewsFooterItem)
+                    {
+                        <li><a href="@Url.RouteUrl("NewsArchive")">@T("News")</a></li>
+                    }
+                    @if (Model.RecentlyViewedProductsEnabled && Model.DisplayRecentlyViewedProductsFooterItem)
+                    {
+                        <li><a href="@Url.RouteUrl("RecentlyViewedProducts")">@T("Products.RecentlyViewedProducts")</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="col-md-4 footer-block follow-us">
+                <div class="social">
+                    <div class="title">
+                        <strong>@T("Footer.FollowUs")</strong>
+                    </div>
+                    @await Component.InvokeAsync("SocialButtons")
+                </div>
+                @await Component.InvokeAsync("NewsletterBox")
+            </div>
+        </div>
+        <div class="footer-lower row">
+            <div class="footer-info">
+                <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
+            </div>
+        </div>
+    </div>
+  
+</div>

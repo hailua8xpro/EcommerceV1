@@ -1,0 +1,70 @@
+﻿@model NewsCategoryModel
+
+@if (Model.Id > 0)
+{
+<div class="panel-body">
+    @await Html.PartialAsync("Table", new DataTablesModel
+{
+    Name = "news-grid",
+    UrlRead = new DataUrl("NewsList", "NewsCategory", new RouteValueDictionary { [nameof(Model.CategoryNewsSearchModel.NewsCategoryId)] = Model.CategoryNewsSearchModel.NewsCategoryId }),
+    UrlDelete = new DataUrl("NewsDelete", "NewsCategory", null),
+    UrlUpdate = new DataUrl("NewsUpdate", "NewsCategory", null),
+    Length = Model.CategoryNewsSearchModel.PageSize,
+    LengthMenu = Model.CategoryNewsSearchModel.AvailablePageSizes,
+    ColumnCollection = new List<ColumnProperty>
+        {
+            new ColumnProperty(nameof(CategoryNewsModel.Title))
+            {
+                Title = T("Admin.ContentManagement.News.Categories.News.Fields.News").Text
+            },
+            new ColumnProperty(nameof(CategoryNewsModel.NewsId))
+            {
+                Title = T("Admin.Common.View").Text,
+                Width = "150",
+                ClassName = NopColumnClassDefaults.Button,
+                Render = new RenderButtonView(new DataUrl("~/Admin/News/NewsItemEdit/", nameof(CategoryNewsModel.NewsId)))
+            },
+            new ColumnProperty(nameof(CategoryNewsModel.Id))
+            {
+                Title = T("Admin.Common.Edit").Text,
+                Width = "200",
+                ClassName =  NopColumnClassDefaults.Button,
+                Render = new RenderButtonsInlineEdit()
+            },
+            new ColumnProperty(nameof(CategoryNewsModel.Id))
+            {
+                Title = T("Admin.Common.Delete").Text,
+                Width = "100",
+                Render = new RenderButtonRemove(T("Admin.Common.Delete").Text),
+                ClassName = NopColumnClassDefaults.Button
+            }
+        }
+})
+</div>
+    <div class="panel-footer">
+        <button type="submit" id="btnAddNewProduct"
+                onclick="javascript:OpenWindow('@(Url.Action("NewsAddPopup", "NewsCategory", new { categoryId = Model.Id, btnId = "btnRefreshProducts", formId = "newscategory-form" }))', 800, 800, true); return false;"
+                class="btn btn-primary">
+            @T("Admin.ContentManagement.News.Categories.News.AddNew")
+        </button>
+        <input type="submit" id="btnRefreshProducts" style="display: none" />
+        <script>
+            $(document).ready(function () {
+                $('#btnRefreshProducts').click(function () {
+                    //refresh grid
+                    updateTable('#news-grid');
+
+                    //return false to don't reload a page
+                    return false;
+                });
+            });
+    </script>
+</div>
+}
+else
+{
+    <div class="panel-body">
+        @T("Admin.Catalog.Categories.Products.SaveBeforeEdit")
+    </div>
+}
+

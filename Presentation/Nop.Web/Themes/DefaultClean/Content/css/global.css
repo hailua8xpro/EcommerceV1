@@ -1,0 +1,23 @@
+﻿:root {
+    --maincolor: #5fa30f;
+}
+
+.maincolor {
+    color: var(--maincolor);
+}
+
+.mainbgcolor {
+    background-color: var(--maincolor);
+}
+.three-row {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.two-row {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

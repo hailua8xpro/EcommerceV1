@@ -1,0 +1,26 @@
+﻿@model CurrencySelectorModel
+
+@inject Nop.Core.IWebHelper webHelper
+
+@if (Model.AvailableCurrencies.Count > 1)
+{
+    var selectedid = 0;
+    var selected = Model.AvailableCurrencies.FirstOrDefault(cur => cur.Id == Model.CurrentCurrencyId);
+    
+   <div class="item"> <div class="ui simple dropdown item">
+        @if (selected != null)
+        {
+            selectedid = selected.Id;
+                @selected.Name
+        }
+        <i class="dropdown icon"></i>
+        <div class="menu">
+            @foreach (var item in Model.AvailableCurrencies.Where(cur => cur.Id != selectedid))
+            {
+                var returnUrl = webHelper.GetRawUrl(Context.Request);
+                var url = Url.RouteUrl("ChangeCurrency", new { customercurrency = item.Id, returnUrl }, webHelper.CurrentRequestProtocol);
+                <div class="item"><a href="@url">@item.Name</a></div>
+            }
+        </div>
+    </div></div>
+}

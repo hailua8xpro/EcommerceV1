@@ -1,0 +1,51 @@
+﻿@model LanguageSelectorModel
+
+@inject Nop.Core.IWebHelper webHelper
+
+@if (Model.AvailableLanguages.Count > 1)
+{
+    var selectedid = 0;
+    <div class="item"><div class="ui simple dropdown item">
+        @{
+            var returnUrl = webHelper.GetRawUrl(Context.Request);
+
+            if (Model.UseImages)
+            {
+
+                var selected = Model.AvailableLanguages.FirstOrDefault(cur => cur.Id == Model.CurrentLanguageId);
+                if (selected != null)
+                {
+                    selectedid = selected.Id;
+                    
+                        <img title='@selected.Name' alt='@selected.Name'
+                             src="@Url.Content("~/images/flags/" +selected.FlagImageFileName)" width="18" height="12" />
+                        <span>@selected.Name</span>
+                        <i class="dropdown icon"></i>
+
+                }
+                <div class="menu" aria-labelledby="dropdownLanguages">
+                    @foreach (var lang in Model.AvailableLanguages.Where(lang => lang.Id != selectedid))
+                    {
+                        <div class="item"><a href="@Url.RouteUrl("ChangeLanguage", new { langid = lang.Id, returnUrl }, webHelper.CurrentRequestProtocol)">
+                            <img title='@lang.Name' alt='@lang.Name' @(lang.Id == Model.CurrentLanguageId ? " class=selected" : null)
+                                 src="@Url.Content("~/images/flags/" + @lang.FlagImageFileName) " /> <span>@lang.Name</span>
+                            </a></div>
+                        }
+                </div>
+            }
+            else
+            {
+                var languages = Model.AvailableLanguages.Select(lang => new SelectListItem
+                {
+                    Text = lang.Name,
+                    Value = Url.RouteUrl("ChangeLanguage", new { langid = lang.Id, returnUrl }, webHelper.CurrentRequestProtocol),
+                    Selected = lang.Id.Equals(Model.CurrentLanguageId)
+                });
+
+                <select id="customerlanguage" name="customerlanguage" asp-items="@languages" onchange="setLocation(this.value);" aria-label="@T("Languages.Selector.Label")"></select>
+            }
+        }
+
+    </div></div>
+
+}

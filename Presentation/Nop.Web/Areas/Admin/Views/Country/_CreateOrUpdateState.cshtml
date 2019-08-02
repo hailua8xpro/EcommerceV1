@@ -1,0 +1,20 @@
+@model StateProvinceModel
+
+@{
+    const string hideInfoBlockAttributeName = "StatePage.HideInfoBlock";
+    var hideInfoBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideInfoBlockAttributeName);
+
+    const string hideDistrictBlockAttributeName = "StatePage.HideDistrictBlock";
+    var hideDistrictBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideDistrictBlockAttributeName, defaultValue: true);
+}
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<input asp-for="CountryId" type="hidden" />
+<div class="content">
+    <div class="form-horizontal">
+        <nop-panels id="country-panels">
+            <nop-panel asp-name="country-info" asp-icon="fa fa-info" asp-title="@T("Admin.Configuration.Countries.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateState.Info", Model)</nop-panel>
+            <nop-panel asp-name="country-states" asp-icon="fa fa-globe" asp-title="@T("Admin.Configuration.Countries.States")" asp-hide-block-attribute-name="@hideDistrictBlockAttributeName" asp-hide="@hideDistrictBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateState.Districts", Model)</nop-panel>
+        </nop-panels>
+    </div>
+</div>

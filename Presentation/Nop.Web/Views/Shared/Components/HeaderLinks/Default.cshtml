@@ -1,0 +1,47 @@
+﻿@model HeaderLinksModel
+@inject Nop.Core.IWebHelper webHelper
+
+<div class="header-action row no-gutters">
+    <div class="btn-nav-mobile d-md-none col">
+        <button class="btn-nav"></button>
+    </div>
+    <div class="d-block d-md-none btn-search-mobile col">
+        <i class="la la-search"></i>
+    </div>
+    <div class="col">
+                <a href="@Url.RouteUrl("Wishlist")">
+                    <span class="lnr lnr-heart"></span>
+                    <span class="wishlist-qty">@T("Wishlist.HeaderQuantity", Model.WishlistItems)</span>
+                </a>
+    </div>
+    <div class="col">
+        <a href="@Url.RouteUrl("ShoppingCart")">
+            <span class="lnr lnr-cart"></span>
+            <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
+            @await Component.InvokeAsync("FlyoutShoppingCart")
+        </a>
+    </div>
+    <div class="user-topbar col">
+        <span class="lnr lnr-user"></span>
+        @if (Model.IsAuthenticated)
+        {
+            <div class="ui-dropdown">
+                <a href="#" class="d-inline-block mt-2"><span class="btn-account"></span></a>
+                <div class="ui-dropdown-wrap">
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+                        <li><a href="@Url.RouteUrl("Logout")">@T("Account.Logout")</a></li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+        }
+        else
+        {
+                <a href="@Url.RouteUrl("Login")" class="d-inline-block mt-2"><span class="btn-account"></span> Đăng nhập</a>
+        }
+    </div>
+</div>
+

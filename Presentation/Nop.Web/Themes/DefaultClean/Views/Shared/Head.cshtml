@@ -1,0 +1,16 @@
+﻿@using Nop.Core
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.UI
+@inject IWorkContext workContext
+@inject IThemeContext themeContext
+@inject IUserAgentHelper userAgentHelper
+@{
+    var themeName = themeContext.WorkingThemeName;
+
+    //add main CSS file
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/global.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/font-linearicon/style.css");
+    Html.AppendCssFileParts("~/lib/bootstrap-4.3.1/css/bootstrap.css");
+    
+}

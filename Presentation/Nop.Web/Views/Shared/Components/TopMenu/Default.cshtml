@@ -1,0 +1,50 @@
+﻿@model TopMenuModel
+@{
+    var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+}
+<div class="menu main-menu">
+    <ul class="list-unstyled main-menu-ul">
+        @foreach (var category in rootCategories)
+        {
+            <li>
+                <a href="@Url.RouteUrl("Category", new { SeName = category.SeName })">
+                    @category.Name
+                </a>
+                @{
+                    //subcategories
+                    var subCategories =
+                        category.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+                    if (subCategories.Count > 0)
+                    {
+                        <ul class="list-unstyled level-2">
+                            @foreach (var subCategory in subCategories)
+                            {
+                                var childsub=subCategory.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+                            <li>
+                                <a href="@Url.RouteUrl("Category", new { SeName = subCategory.SeName })">@subCategory.Name</a>
+                                @if (childsub != null && childsub.Any())
+                                {
+                                    <ul class="list-unstyled level-3">
+                                        @foreach (var sub in childsub)
+                                        {
+                                            <li>
+                                                <a href="@Url.RouteUrl("Category", new { SeName = sub.SeName })">@sub.Name</a>
+                                            </li>
+                                        }
+                                    </ul>
+                                }
+                            </li>
+                            }
+                        </ul>
+                    }
+                }
+            </li>
+        }
+        <li><a href="@Url.RouteUrl("NewsArchive")">@T("News")</a></li>
+        @foreach (var topic in Model.Topics)
+        {
+            <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+        }
+    </ul>
+
+</div>
