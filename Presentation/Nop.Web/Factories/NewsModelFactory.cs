@@ -13,6 +13,7 @@ using Nop.Services.Media;
 using Nop.Services.News;
 using Nop.Services.Seo;
 using Nop.Web.Infrastructure.Cache;
+using Nop.Web.Models.Media;
 using Nop.Web.Models.News;
 
 namespace Nop.Web.Factories
@@ -131,7 +132,15 @@ namespace Nop.Web.Factories
             model.AllowComments = newsItem.AllowComments;
             model.CreatedOn = _dateTimeHelper.ConvertToUserTime(newsItem.StartDateUtc ?? newsItem.CreatedOnUtc, DateTimeKind.Utc);
             model.AddNewComment.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnNewsCommentPage;
-
+            var picture = _pictureService.GetPictureById(newsItem.PictureId);
+            var pictureModel = new PictureModel
+            {
+                FullSizeImageUrl = _pictureService.GetPictureUrl(picture),
+                ImageUrl = _pictureService.GetPictureUrl(picture, 370),
+                Title = newsItem.Title,
+                AlternateText = newsItem.Title
+            };
+            model.PictureModel = pictureModel;
             //number of news comments
             var storeId = _newsSettings.ShowNewsCommentsPerStore ? _storeContext.CurrentStore.Id : 0;
             var cacheKey = string.Format(NopModelCacheDefaults.NewsCommentsNumberKey, newsItem.Id, storeId, true);

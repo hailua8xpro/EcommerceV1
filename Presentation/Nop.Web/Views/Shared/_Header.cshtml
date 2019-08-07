@@ -1,11 +1,11 @@
 ﻿<header>
-    <div class="container">
-        <div class="header-top">
-            <div class="row">
-                <div class="col-md-3">
+    <div class="header-main-content sticky-menu">
+        <div class="container">
+            <div class="row header-top align-items-center">
+                <div class="col-md-3 col-logo">
                     @await Component.InvokeAsync("Logo")
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 col-search">
                     @await Component.InvokeAsync("SearchBox")
                 </div>
                 <div class="col-md-3">
@@ -13,9 +13,10 @@
                 </div>
             </div>
         </div>
-        <div class="header-bottom">
+    </div>
+    <div class="header-bottom border-bottom border-top d-none d-md-block">
+        <div class="container">
             @await Component.InvokeAsync("TopMenu")
-
         </div>
     </div>
 </header>

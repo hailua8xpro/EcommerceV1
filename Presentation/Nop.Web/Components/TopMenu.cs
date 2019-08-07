@@ -13,7 +13,7 @@ namespace Nop.Web.Components
             _catalogModelFactory = catalogModelFactory;
         }
 
-        public IViewComponentResult Invoke(int? productThumbPictureSize)
+        public IViewComponentResult Invoke()
         {
             var model = _catalogModelFactory.PrepareTopMenuModel();
             return View(model);

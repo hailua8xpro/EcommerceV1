@@ -1,0 +1,68 @@
+@model TestimonialModel
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel panel-body">
+                    <div class="form-group advanced-setting">
+                        <div class="col-md-3">
+                            <nop-label asp-for="PictureId" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="PictureId" />
+                            <span asp-validation-for="PictureId"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="FullName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="FullName" />
+                            <span asp-validation-for="FullName"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="Description" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="Description" />
+                            <span asp-validation-for="Description"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="FullDescription" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="FullDescription" asp-template="RichEditor" />
+                            <span asp-validation-for="FullDescription"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="DisplayOrder" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DisplayOrder" />
+                            <span asp-validation-for="DisplayOrder"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="Published" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="Published" />
+                            <span asp-validation-for="Published"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

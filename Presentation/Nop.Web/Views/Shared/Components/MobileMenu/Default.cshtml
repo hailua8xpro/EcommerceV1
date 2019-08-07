@@ -1,0 +1,60 @@
+﻿@model TopMenuModel
+@{
+    var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+}
+<div class="mobile-menu overlay-contentpush">
+    <div class="nav-bar-wrap">
+        <nav class="nav-bar">
+            @await Component.InvokeAsync("Logo")
+            <ul class="list-unstyled mobile-menu-ul">
+                @foreach (var category in rootCategories)
+                {
+                    var subCategories =
+                                category.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+                <li>
+                    <a href="@Url.RouteUrl("Category", new { SeName = category.SeName })">
+                        @category.Name
+
+                    </a>
+                    @if (subCategories.Count > 0)
+                    {
+                        <span class="mbi mbi-ios-arrow-down"></span>
+                    }
+                    @{
+                        if (subCategories.Count > 0)
+                        {
+                            <ul class="list-unstyled level-2">
+                                @foreach (var subCategory in subCategories)
+                                {
+                                    var childsub = subCategory.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+                                    <li>
+                                        <a href="@Url.RouteUrl("Category", new { SeName = subCategory.SeName })">@subCategory.Name</a>
+                                        @if (childsub != null && childsub.Any())
+                                        {
+                                            <ul class="list-unstyled level-3">
+                                                @foreach (var sub in childsub)
+                                                {
+                                                    <li>
+                                                        <a href="@Url.RouteUrl("Category", new { SeName = sub.SeName })">@sub.Name</a>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    }
+                </li>
+                }
+                <li><a href="@Url.RouteUrl("NewsArchive")">@T("News")</a></li>
+                @foreach (var topic in Model.Topics)
+                {
+                    <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+                }
+            </ul>
+
+        </nav>
+        <div class="close-nav"><span aria-hidden="true" class="mbi mbi-arrow-left"></span></div>
+    </div>
+</div>

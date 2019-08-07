@@ -52,6 +52,7 @@ using Nop.Services.Shipping.Pickup;
 using Nop.Services.Stores;
 using Nop.Services.Tasks;
 using Nop.Services.Tax;
+using Nop.Services.Testimonials;
 using Nop.Services.Themes;
 using Nop.Services.Topics;
 using Nop.Services.Vendors;
@@ -220,6 +221,7 @@ namespace Nop.Web.Framework.Infrastructure
             builder.RegisterType<NewsService>().As<INewsService>().InstancePerLifetimeScope();
             builder.RegisterType<NewsCategoryService>().As<INewsCategoryService>().InstancePerLifetimeScope();
             builder.RegisterType<BannerService>().As<IBannerService>().InstancePerLifetimeScope();
+            builder.RegisterType<TestimonialService>().As<ITestimonialService>().InstancePerLifetimeScope();
             builder.RegisterType<DateTimeHelper>().As<IDateTimeHelper>().InstancePerLifetimeScope();
             builder.RegisterType<SitemapGenerator>().As<ISitemapGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<PageHeadBuilder>().As<IPageHeadBuilder>().InstancePerLifetimeScope();

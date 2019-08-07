@@ -69,8 +69,6 @@ namespace Nop.Web.Areas.Admin.Factories
         }
         #endregion
         #region Methods
-
-        #endregion
         public AddNewsToCategoryListModel PrepareAddNewsToCategoryListModel(AddNewsToCategorySearchModel searchModel)
         {
             if (searchModel == null)
@@ -244,5 +242,7 @@ namespace Nop.Web.Areas.Admin.Factories
             searchModel.SetGridPageSize();
             return searchModel;
         }
+        #endregion
+
     }
 }

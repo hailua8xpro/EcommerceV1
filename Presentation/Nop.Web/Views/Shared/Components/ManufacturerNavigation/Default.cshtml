@@ -2,14 +2,16 @@
 @if (Model.Manufacturers.Count > 0)
 {
     <div class="block block-manufacturer-navigation">
-        <div class="title">
+        <div class="block-title">
             <strong>@T("Manufacturers")</strong>
+            <span class="toggle-class"></span>
         </div>
-        <div class="listbox">
-            <ul class="list">
+        <div class="block-content">
+            <ul class="nav-collapse nav-manufacture">
                 @foreach (var manufacturer in Model.Manufacturers)
                 {
-                    <li class="@(manufacturer.IsActive ? "active" : "inactive")"><a href="@Url.RouteUrl("Manufacturer", new { SeName = manufacturer.SeName })">@manufacturer.Name</a>
+                    <li class="@(manufacturer.IsActive ? "active" : "inactive")">
+                        <a href="@Url.RouteUrl("Manufacturer", new { SeName = manufacturer.SeName })">@manufacturer.Name</a>
                     </li>
                 }
             </ul>
@@ -20,5 +22,7 @@
                 </div>
             }
         </div>
+        <div class="close-expand-mb"></div>
+        <div class="close-expanded"></div>
     </div>
 }

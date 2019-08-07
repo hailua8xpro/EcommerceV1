@@ -49,6 +49,7 @@ namespace Nop.Web.Areas.Admin.Models.News
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Full")]
         public string Full { get; set; }
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Picture")]
+        [UIHint("Picture")]
         public int PictureId { get; set; }
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.AllowComments")]
         public bool AllowComments { get; set; }

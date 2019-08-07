@@ -6,6 +6,7 @@ using Nop.Core.Domain.News;
 using Nop.Services.Events;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
+using Nop.Services.Media;
 using Nop.Services.Messages;
 using Nop.Services.News;
 using Nop.Services.Security;
@@ -32,6 +33,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IPermissionService _permissionService;
         private readonly IStoreMappingService _storeMappingService;
         private readonly IStoreService _storeService;
+        private readonly IPictureService _pictureService;
         private readonly IUrlRecordService _urlRecordService;
 
         #endregion
@@ -47,7 +49,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             IPermissionService permissionService,
             IStoreMappingService storeMappingService,
             IStoreService storeService,
-            IUrlRecordService urlRecordService)
+            IUrlRecordService urlRecordService,
+            IPictureService pictureService)
         {
             _customerActivityService = customerActivityService;
             _eventPublisher = eventPublisher;
@@ -59,11 +62,18 @@ namespace Nop.Web.Areas.Admin.Controllers
             _storeMappingService = storeMappingService;
             _storeService = storeService;
             _urlRecordService = urlRecordService;
+            _pictureService = pictureService;
         }
 
         #endregion
 
         #region Utilities
+        protected virtual void UpdatePictureSeoNames(NewsItem newsItem)
+        {
+            var picture = _pictureService.GetPictureById(newsItem.PictureId);
+            if (picture != null)
+                _pictureService.SetSeoFilename(picture.Id, _pictureService.GetPictureSeName(newsItem.Title));
+        }
 
         protected virtual void SaveStoreMappings(NewsItem newsItem, NewsItemModel model)
         {
@@ -145,6 +155,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 var newsItem = model.ToEntity<NewsItem>();
                 newsItem.CreatedOnUtc = DateTime.UtcNow;
                 _newsService.InsertNews(newsItem);
+                UpdatePictureSeoNames(newsItem);
 
                 //activity log
                 _customerActivityService.InsertActivity("AddNewNews",
@@ -201,9 +212,18 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var prevPictureId = newsItem.PictureId;
                 newsItem = model.ToEntity(newsItem);
                 _newsService.UpdateNews(newsItem);
+                if (prevPictureId > 0 && prevPictureId != newsItem.PictureId)
+                {
+                    var prevPicture = _pictureService.GetPictureById(prevPictureId);
+                    if (prevPicture != null)
+                        _pictureService.DeletePicture(prevPicture);
+                }
 
+                //update picture seo file name
+                UpdatePictureSeoNames(newsItem);
                 //activity log
                 _customerActivityService.InsertActivity("EditNews",
                     string.Format(_localizationService.GetResource("ActivityLog.EditNews"), newsItem.Id), newsItem);

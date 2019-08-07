@@ -11,12 +11,18 @@
 
         @if (IsSectionDefined("Breadcrumb"))
         {
-            @RenderSection("Breadcrumb") 
+            @RenderSection("Breadcrumb")
         }
         <div class="master-column-wrapper">
             @RenderBody()
         </div>
     </div>
+    <div class="bg-gray py-4">
+        <div class="container">
+            @await Component.InvokeAsync("RecentlyViewedProductsBlock", new { productThumbPictureSize = 140 })
+        </div>
+    </div>
     @await Component.InvokeAsync("Footer")
 </div>
 @await Component.InvokeAsync("EuCookieLaw")
+@await Component.InvokeAsync("MobileMenu")

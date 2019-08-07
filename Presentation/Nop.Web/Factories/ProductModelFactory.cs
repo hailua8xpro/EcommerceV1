@@ -326,6 +326,10 @@ namespace Nop.Web.Factories
 
                         priceModel.Price = _priceFormatter.FormatPrice(finalPriceWithDiscount);
                         priceModel.PriceValue = finalPriceWithDiscount;
+                        if (finalPriceWithDiscount>0 && finalPriceWithDiscount < strikeThroughPrice)
+                        {
+                            priceModel.DifferencePricePercent =Convert.ToInt32((strikeThroughPrice - finalPriceWithDiscount) / strikeThroughPrice*100);
+                        }
                     }
 
                     if (product.IsRental)
@@ -1618,9 +1622,9 @@ namespace Nop.Web.Factories
                 }).ToList()
             );
         }
-       public IList<HomeRealModel> PrepareHomeRealModel()
+       public IList<HomePageProductModel> PrepareHomePageProductModel()
         {
-            var result = new List<HomeRealModel>();
+            var result = new List<HomePageProductModel>();
             var rootcate = _categoryService.GetRootCategories();
             if (rootcate!=null && rootcate.Any())
             {
@@ -1630,7 +1634,8 @@ namespace Nop.Web.Factories
                     var products = _productService.SearchProducts(
                        categoryIds: new List<int> { cate.Id }).Where(x=>x.ShowOnHomepage);
                     var productOverViewModels = PrepareProductOverviewModels(products, true, true, _mediaSettings.ProductThumbPictureSize);
-                    var model = new HomeRealModel {
+                    var model = new HomePageProductModel
+                    {
                         CategoryModel=new CategoryModel {
                             Description=cate.Description,
                             Name=cate.Name,

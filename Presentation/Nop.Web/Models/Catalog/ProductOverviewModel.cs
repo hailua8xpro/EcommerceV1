@@ -43,6 +43,7 @@ namespace Nop.Web.Models.Catalog
             public string OldPrice { get; set; }
             public string Price { get; set; }
             public decimal PriceValue { get; set; }
+            public int DifferencePricePercent { get; set; }
             /// <summary>
             /// PAngV baseprice (used in Germany)
             /// </summary>

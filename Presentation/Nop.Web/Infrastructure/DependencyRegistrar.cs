@@ -60,6 +60,7 @@ namespace Nop.Web.Infrastructure
             builder.RegisterType<NewsModelFactory>().As<INewsModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<NewsCategoryModelFactory>().As<INewsCategoryModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<BannerModelFactory>().As<IBannerModelFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<TestimonialModelFactory>().As<ITestimonialModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<OrderModelFactory>().As<IOrderModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<PaymentModelFactory>().As<IPaymentModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<PluginModelFactory>().As<IPluginModelFactory>().InstancePerLifetimeScope();
@@ -97,6 +98,8 @@ namespace Nop.Web.Infrastructure
             builder.RegisterType<Factories.ForumModelFactory>().As<Factories.IForumModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.ExternalAuthenticationModelFactory>().As<Factories.IExternalAuthenticationModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.NewsModelFactory>().As<Factories.INewsModelFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<Factories.BannerModelFactory>().As<Factories.IBannerModelFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<Factories.TestimonialModelFactory>().As<Factories.ITestimonialModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.NewsletterModelFactory>().As<Factories.INewsletterModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.OrderModelFactory>().As<Factories.IOrderModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<Factories.PollModelFactory>().As<Factories.IPollModelFactory>().InstancePerLifetimeScope();

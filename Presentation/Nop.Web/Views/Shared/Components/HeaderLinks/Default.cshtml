@@ -3,31 +3,40 @@
 
 <div class="header-action row no-gutters">
     <div class="btn-nav-mobile d-md-none col">
-        <button class="btn-nav"></button>
+        <button class="btn-nav">
+            <span></span>
+        </button>
     </div>
     <div class="d-block d-md-none btn-search-mobile col">
-        <i class="la la-search"></i>
+        <span class="mbi mbi-magnifier"></span>
     </div>
     <div class="col">
-                <a href="@Url.RouteUrl("Wishlist")">
-                    <span class="lnr lnr-heart"></span>
-                    <span class="wishlist-qty">@T("Wishlist.HeaderQuantity", Model.WishlistItems)</span>
-                </a>
-    </div>
-    <div class="col">
-        <a href="@Url.RouteUrl("ShoppingCart")">
-            <span class="lnr lnr-cart"></span>
-            <span class="cart-qty">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
-            @await Component.InvokeAsync("FlyoutShoppingCart")
+        <a href="@Url.RouteUrl("Wishlist")" class="wishlist-icon">
+            <span class="mbi mbi-heart"></span>
+            <span class="wishlist-qty counter-number">@T("Wishlist.HeaderQuantity", Model.WishlistItems)</span>
         </a>
     </div>
+    <div class="col">
+        <div class="dropdown cart-dropdown">
+            <a class="showcart-icon dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" id="dropdownCart" aria-expanded="false" href="#">
+                <span class="mbi mbi-bag2"></span>
+                <span class="cart-qty counter-number">@T("ShoppingCart.HeaderQuantity", Model.ShoppingCartItems)</span>
+
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownCart">
+                @await Component.InvokeAsync("FlyoutShoppingCart")
+            </div>
+        </div>
+
+    </div>
     <div class="user-topbar col">
-        <span class="lnr lnr-user"></span>
         @if (Model.IsAuthenticated)
         {
-            <div class="ui-dropdown">
-                <a href="#" class="d-inline-block mt-2"><span class="btn-account"></span></a>
-                <div class="ui-dropdown-wrap">
+            <div class="dropdown account-dropdown">
+                <a href="#" class="dropdown-toggle account-icon" role="button" data-toggle="dropdown" aria-haspopup="true" id="dropdownAccount" aria-expanded="false">
+                    <span class="mbi mbi-user"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAccount">
                     <ul class="list-unstyled mb-0">
                         <li><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
                         <li><a href="@Url.RouteUrl("Logout")">@T("Account.Logout")</a></li>
@@ -40,7 +49,30 @@
         }
         else
         {
-                <a href="@Url.RouteUrl("Login")" class="d-inline-block mt-2"><span class="btn-account"></span> Đăng nhập</a>
+            var returnUrl = webHelper.GetRawUrl(Context.Request);
+            <div class="dropdown account-dropdown d-md-none">
+                <a href="#" class="dropdown-toggle account-icon" role="button" data-toggle="dropdown" aria-haspopup="true" id="dropdownAccount" aria-expanded="false"><span class="mbi mbi-user"></span></a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownAccount">
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <a href="@Url.RouteUrl("Login")">@T("Account.Login")</a>
+                        </li>
+                        <li>
+                            <a href="@Url.RouteUrl("Register", new { returnUrl })">@T("Account.Register")</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="d-none d-md-block"><a href="javascript:" class="account-icon"><span class="mbi mbi-user"></span></a>
+            <ul class="account-links d-inline-block">
+                <li>
+                    <a href="@Url.RouteUrl("Login")">@T("Account.Login")</a>
+                </li>
+                <li>
+                    <a href="@Url.RouteUrl("Register", new { returnUrl })">@T("Account.Register")</a>
+                </li>
+            </ul></div>
         }
     </div>
 </div>

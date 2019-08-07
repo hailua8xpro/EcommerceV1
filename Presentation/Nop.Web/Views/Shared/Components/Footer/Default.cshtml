@@ -1,7 +1,7 @@
 ﻿@model FooterModel
 @using Nop.Core
 @inject IWorkContext workContext;
-<div class="footer">
+<footer class="border-top pt-4">
     <div class="container">
         <div class="footer-upper row">
             <div class="col-md-4 footer-block information">
@@ -35,20 +35,20 @@
                 </ul>
             </div>
             <div class="col-md-4 footer-block follow-us">
-                <div class="social">
+                @await Component.InvokeAsync("NewsletterBox")
+                <div class="social mt-4">
                     <div class="title">
                         <strong>@T("Footer.FollowUs")</strong>
                     </div>
                     @await Component.InvokeAsync("SocialButtons")
                 </div>
-                @await Component.InvokeAsync("NewsletterBox")
             </div>
         </div>
-        <div class="footer-lower row">
+        <div class="footer-lower border-top py-3 mt-4">
             <div class="footer-info">
                 <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
             </div>
         </div>
     </div>
   
-</div>
+</footer>

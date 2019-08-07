@@ -2,9 +2,15 @@
     Layout = "_ColumnsOne";
     Html.AppendPageCssClassParts("html-home-page");
 }
-<div class="page home-page">
-    <div class="page-body container">
-        @await Component.InvokeAsync("HomepageReals")
-        @await Component.InvokeAsync("HomepageNews")
+    <div class="page home-page">
+        @await Component.InvokeAsync("HomepageBanner")
+        <div class="page-body container">
+            @await Component.InvokeAsync("HomepageProducts")
+        </div>
+        @await Component.InvokeAsync("HomepageTestimonials")
+        <div class="bg-gray">
+            <div class="container py-3">
+                @await Component.InvokeAsync("HomepageNews")
+            </div>
+        </div>
     </div>
-</div>

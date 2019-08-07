@@ -71,6 +71,6 @@ namespace Nop.Web.Factories
         /// <param name="product">Product</param>
         /// <returns>List of product specification model</returns>
         IList<ProductSpecificationModel> PrepareProductSpecificationModel(Product product);
-        IList<HomeRealModel> PrepareHomeRealModel();
+        IList<HomePageProductModel> PrepareHomePageProductModel();
     }
 }

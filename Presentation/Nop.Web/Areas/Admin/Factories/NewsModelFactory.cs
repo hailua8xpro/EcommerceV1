@@ -178,7 +178,8 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.Published = true;
                 model.AllowComments = true;
             }
-            //prepare available stores
+            ///prepare available languages
+            _baseAdminModelFactory.PrepareLanguages(model.AvailableLanguages, false);
             _storeMappingSupportedModelFactory.PrepareModelStores(model, newsItem, excludeProperties);
 
             return model;

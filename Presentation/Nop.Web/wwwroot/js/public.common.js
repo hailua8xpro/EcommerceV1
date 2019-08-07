@@ -57,11 +57,11 @@ function displayPopupNotification(message, messagetype, modal) {
     }
 
     container.html(htmlcode);
-
-    var isModal = (modal ? true : false);
-    container.dialog({
-        modal: isModal,
-        width: 350
+    $.magnificPopup.open({
+        items: {
+            src: container
+        },
+        type: 'inline'
     });
 }
 function displayJoinedPopupNotifications(notes) {

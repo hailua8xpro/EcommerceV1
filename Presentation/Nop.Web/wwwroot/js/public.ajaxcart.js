@@ -5,7 +5,7 @@
 
 var AjaxCart = {
     loadWaiting: false,
-    usepopupnotifications: false,
+    usepopupnotifications: true,
     topcartselector: '',
     topwishlistselector: '',
     flyoutcartselector: '',
@@ -24,7 +24,8 @@ var AjaxCart = {
     },
 
     //add a product to the cart/wishlist from the catalog pages
-    addproducttocart_catalog: function (urladd) {
+    addproducttocart_catalog: function (urladd, e) {
+        $(e).addClass('disabled');
         if (this.loadWaiting != false) {
             return;
         }
@@ -76,6 +77,7 @@ var AjaxCart = {
     },
 
     success_process: function (response) {
+        $('.product-btn a.disabled').removeClass('disabled');
         if (response.updatetopcartsectionhtml) {
             $(AjaxCart.topcartselector).html(response.updatetopcartsectionhtml);
         }
@@ -89,23 +91,11 @@ var AjaxCart = {
             //display notification
             if (response.success == true) {
                 //success
-                if (AjaxCart.usepopupnotifications == true) {
-                    displayPopupNotification(response.message, 'success', true);
-                }
-                else {
-                    //specify timeout for success messages
-                    displayBarNotification(response.message, 'success', 3500);
-                }
+                displayPopupNotification(response.message, 'success', true);
             }
             else {
                 //error
-                if (AjaxCart.usepopupnotifications == true) {
-                    displayPopupNotification(response.message, 'error', true);
-                }
-                else {
-                    //no timeout for errors
-                    displayBarNotification(response.message, 'error', 0);
-                }
+                displayPopupNotification(response.message, 'error', true);
             }
             return false;
         }

@@ -498,6 +498,9 @@
         /// </remarks>
         public static string HomepageNewsModelKey => "Nop.pres.news.homepage-{0}-{1}";
         public static string NewsPrefixCacheKey => "Nop.pres.news";
+
+        public static string BannerModelKey => "Nop.pres.banner-{0}-{1}";
+        public static string BannerPrefixCacheKey => "Nop.pres.banner";
         /// <summary>
         /// Key for number of news comments
         /// </summary>

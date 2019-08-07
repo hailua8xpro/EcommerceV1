@@ -5,8 +5,7 @@
     //active menu item (system name)
     Html.SetActiveMenuItemSystemName("News categories");
 }
-
-<form asp-controller="Category" asp-action="Edit" method="post" id="category-form">
+<form asp-controller="NewsCategory" asp-action="Edit" method="post" id="category-form">
     <div class="content-header clearfix">
         <h1 class="pull-left">
             @T("Admin.ContentManagement.News.Categories.EditCategoryDetails") - @Model.Name
@@ -14,6 +13,7 @@
                 <i class="fa fa-arrow-circle-left"></i>
                 <a asp-action="List">@T("Admin.ContentManagement.News.Categories.BackToList")</a>
             </small>
+
         </h1>
         <div class="pull-right">
             <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("NewsCategory", new {SeName = Model.SeName})', 800, 600, true); return false;" class="btn bg-purple">

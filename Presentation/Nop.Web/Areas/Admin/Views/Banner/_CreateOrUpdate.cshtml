@@ -33,32 +33,7 @@
                             <nop-label asp-for="Caption" />
                         </div>
                         <div class="col-md-9">
-                            @if (adminAreaSettings.UseRichEditorInMessageTemplates)
-                            {
-                                //we use rich editor with BODY tag supported
-                                //it could be a better practice to implement one more editor (similar to RichEditor.cshtml)
-                                //with "enableFullPage" property set to "true". but we do not want to duplicate source code
-                                //that's why we use this workaround
-                                //we store a value into "ViewData" and then use it in the RichEditor.cshtml file
-                                ViewData["nop.RichEditor.EnableFullPage"] = true;
-                                <div class="input-group input-group-required">
-                                    <nop-editor asp-for="Caption" asp-template="RichEditor" />
-                                    <div class="input-group-btn">
-                                        <nop-required />
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <nop-textarea asp-for="Caption"></nop-textarea>
-                                <text>
-                                    <script>
-                                        $(document).ready(function () {
-                                            $('#@Html.IdFor(model => model.Caption)').height($('#@Html.IdFor(model => model.Caption)')[0].scrollHeight);
-                                        });
-                                    </script>
-                                </text>
-                            }
+                            <nop-editor asp-for="Caption" asp-template="RichEditor" />
                             <span asp-validation-for="Caption"></span>
                         </div>
                     </div>

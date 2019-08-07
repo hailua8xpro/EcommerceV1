@@ -221,6 +221,28 @@ namespace Nop.Web.Areas.Admin.Controllers
             //if we got this far, something failed, redisplay form
             return View(model);
         }
+
+        [HttpPost]
+        public virtual IActionResult Delete(int id)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel))
+                return AccessDeniedView();
+
+            //try to get a manufacturer with the specified id
+            var banner = _bannerService.GetBannerById(id);
+            if (banner == null)
+                return RedirectToAction("List");
+
+            _bannerService.DeleteBanner(banner);
+
+            //activity log
+            _customerActivityService.InsertActivity("DeleteBanner",
+                string.Format(_localizationService.GetResource("ActivityLog.DeleteBanner"), banner.Title), banner);
+
+            _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.Banners.Deleted"));
+
+            return RedirectToAction("List");
+        }
         #endregion
 
     }

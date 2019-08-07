@@ -1,0 +1,65 @@
+@model TestimonialSearchModel
+
+@{
+    //page title
+    ViewBag.Title = T("Admin.ContentManagement.Testimonials").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Testimonials");
+}
+
+@{
+    const string hideSearchBlockAttributeName = "CampaignPage.HideSearchBlock";
+    var hideSearchBlock = genericAttributeService.GetAttribute<bool>(workContext.CurrentCustomer, hideSearchBlockAttributeName);
+}
+
+<nop-antiforgery-token />
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.ContentManagement.Testimonial")
+    </h1>
+    <div class="pull-right">
+        <a href="@Url.Action("Create")" class="btn bg-blue">
+            <i class="fa fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+        @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.CampaignListButtons })
+    </div>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "campaigns-grid",
+                        UrlRead = new DataUrl("List", "Testimonial", null),
+                        SearchButtonId = "search-testimonials",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(TestimonialModel.FullName))
+                    {
+                        Title = T("Admin.ContentManagement.Testimonials.Fields.FullName").Text,
+                    },
+                            new ColumnProperty(nameof(TestimonialModel.Description))
+                            {
+                                Title = T("Admin.ContentManagement.Testimonials.Fields.Description").Text
+                            },
+                            new ColumnProperty(nameof(TestimonialModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("Edit"))
+                            }
+                        }
+                    })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

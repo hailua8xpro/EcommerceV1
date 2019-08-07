@@ -70,12 +70,11 @@
 
 <div class="ajax-loading-block-window" style="display: none">
 </div>
-<div id="dialog-notifications-success" title="@T("Common.Notification")" style="display:none;">
+<div id="dialog-notifications-success" title="@T("Common.Notification")" class="alert alert-success white-popup mfp-hide">
 </div>
-<div id="dialog-notifications-error" title="@T("Common.Error")" style="display:none;">
+<div id="dialog-notifications-error" title="@T("Common.Error")" class="alert alert-danger white-popup mfp-hide">
 </div>
-<div id="dialog-notifications-warning" title="@T("Common.Warning")" style="display:none;">
+<div id="dialog-notifications-warning" title="@T("Common.Warning")" class="alert alert-warning white-popup mfp-hide">
 </div>
 <div id="bar-notification" class="bar-notification-container" data-close="@T("Common.Close")">
 </div>
-@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.Notifications })

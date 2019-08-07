@@ -43,6 +43,7 @@ namespace Nop.Core.Domain.News
         /// Gets or sets the news item start date and time
         /// </summary>
         public DateTime? StartDateUtc { get; set; }
+        public int PictureId { get; set; }
 
         /// <summary>
         /// Gets or sets the news item end date and time
