@@ -488,7 +488,7 @@ namespace Nop.Web.Factories
             model.PagingFilteringContext.LoadPagedList(products);
 
             //specs
-            model.PagingFilteringContext.SpecificationFilter.PrepareSpecsFilters(alreadyFilteredSpecOptionIds,
+            model.PagingFilteringContext.SpecificationFilter.PrepareSpecsFiltersCustom(alreadyFilteredSpecOptionIds,
                 filterableSpecificationAttributeOptionIds?.ToArray(),
                 _specificationAttributeService, _localizationService, _webHelper, _workContext, _cacheManager);
 

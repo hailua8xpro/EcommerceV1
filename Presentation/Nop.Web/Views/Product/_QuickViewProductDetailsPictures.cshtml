@@ -1,0 +1,29 @@
+﻿@model ProductDetailsModel
+@if (Model.PictureModels.Count > 1)
+{
+<div class="row no-gutters">
+    <div class="col-md-2 pr-2 order-1 order-md-0">
+        <div class="product-detail-gallerythumb-slider">
+            @foreach (var picture in Model.PictureModels)
+            {
+            <div class="gallerythumb-slider"><img src="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title" /></div>
+            }
+        </div>
+    </div>
+    <div class="col-md-10 order-0 order-md-1">
+        <div class="product-detail-gallery-slider main-slider">
+            @foreach (var picture in Model.PictureModels)
+            {
+            <div class="gallery-slider"><img src="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title" /></div>
+            }
+        </div>
+    </div>
+</div>
+}
+else
+{
+<div class="product-detail-gallery-slider">
+    <img src="@Model.DefaultPictureModel.FullSizeImageUrl" class="img-fluid" />
+</div>
+
+}

@@ -1,8 +1,4 @@
 ﻿@model CatalogPagingFilteringModel.PriceRangeFilterModel
-@{
-    var selectedItem = Model.Items.FirstOrDefault(x => x.Selected);
-}
-
 @functions{
 
     public string FormatPriceRangeText(CatalogPagingFilteringModel.PriceRangeFilterItem filterItem)
@@ -30,26 +26,14 @@
             <strong>@T("Filtering.PriceRangeFilter")</strong>
         </div>
         <div class="filter-content">
-            @if (selectedItem == null)
-            {
-                <div class="available-items">
+             <div class="available-items">
                     <ul class="group price-range-group">
                         @foreach (var item in Model.Items)
                         {
-                            <li><a href="@item.FilterUrl">@Html.Raw(FormatPriceRangeText(item))</a></li>
+                            <li><a class="@(item.Selected?"selected":string.Empty)"  href="@item.FilterUrl"> @Html.Raw(FormatPriceRangeText(item))</a></li>
                         }
                     </ul>
                 </div>
-            }
-            else
-            {
-                <div class="filtered-items">
-                    <span class="item">@Html.Raw(FormatPriceRangeText(selectedItem))</span>
-                </div>
-                <div class="remove-filter">
-                    <a href="@Model.RemoveFilterUrl">@T("Filtering.PriceRangeFilter.Remove")</a>
-                </div>
-            }
         </div>
 
     </div>

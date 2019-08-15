@@ -231,20 +231,20 @@ namespace Nop.Web.Models.Catalog
                             item.Selected = true;
 
                         //filter URL
-                        var url = webHelper.ModifyQueryString(webHelper.GetThisPageUrl(true), QUERYSTRINGPARAM, $"{fromQuery}-{toQuery}");
-                        url = ExcludeQueryStringParams(url, webHelper);
+                        string url = "";
+                        if (item.Selected)
+                        {
+                            url=webHelper.RemoveQueryString(webHelper.GetThisPageUrl(true), QUERYSTRINGPARAM);
+                        }
+                        else
+                        {
+                            url = webHelper.ModifyQueryString(webHelper.GetThisPageUrl(true), QUERYSTRINGPARAM, $"{fromQuery}-{toQuery}");
+                        }
+                            url = ExcludeQueryStringParams(url, webHelper);
                         item.FilterUrl = url;
 
                         return item;
                     }).ToList();
-
-                    if (selectedPriceRange != null)
-                    {
-                        //remove filter URL
-                        var url = webHelper.RemoveQueryString(webHelper.GetThisPageUrl(true), QUERYSTRINGPARAM);
-                        url = ExcludeQueryStringParams(url, webHelper);
-                        RemoveFilterUrl = url;
-                    }
                 }
                 else
                 {
@@ -315,6 +315,7 @@ namespace Nop.Web.Models.Catalog
             {
                 AlreadyFilteredItems = new List<SpecificationFilterItem>();
                 NotFilteredItems = new List<SpecificationFilterItem>();
+                FilteredItems = new List<SpecificationFilterItem>();
             }
 
             #endregion
@@ -437,6 +438,71 @@ namespace Nop.Web.Models.Catalog
                     };
                 }).ToList();
             }
+            public virtual void PrepareSpecsFiltersCustom(IList<int> alreadyFilteredSpecOptionIds,
+                int[] filterableSpecificationAttributeOptionIds,
+                ISpecificationAttributeService specificationAttributeService, ILocalizationService localizationService,
+                IWebHelper webHelper, IWorkContext workContext, ICacheManager cacheManager)
+            {
+                Enabled = false;
+                var optionIds = filterableSpecificationAttributeOptionIds != null
+                    ? string.Join(",", filterableSpecificationAttributeOptionIds) : string.Empty;
+                var cacheKey = string.Format(NopModelCacheDefaults.SpecsFilterModelKey, optionIds, workContext.WorkingLanguage.Id);
+
+                var allOptions = specificationAttributeService.GetSpecificationAttributeOptionsByIds(filterableSpecificationAttributeOptionIds);
+                var allFilters = cacheManager.Get(cacheKey, () => allOptions.Select(sao =>
+                    new SpecificationAttributeOptionFilter
+                    {
+                        SpecificationAttributeId = sao.SpecificationAttribute.Id,
+                        SpecificationAttributeName = localizationService.GetLocalized(sao.SpecificationAttribute, x => x.Name, workContext.WorkingLanguage.Id),
+                        SpecificationAttributeDisplayOrder = sao.SpecificationAttribute.DisplayOrder,
+                        SpecificationAttributeOptionId = sao.Id,
+                        SpecificationAttributeOptionName = localizationService.GetLocalized(sao, x => x.Name, workContext.WorkingLanguage.Id),
+                        SpecificationAttributeOptionColorRgb = sao.ColorSquaresRgb,
+                        SpecificationAttributeOptionDisplayOrder = sao.DisplayOrder
+                    }).ToList());
+
+                if (!allFilters.Any())
+                    return;
+
+                //sort loaded options
+                allFilters = allFilters.OrderBy(saof => saof.SpecificationAttributeDisplayOrder)
+                    .ThenBy(saof => saof.SpecificationAttributeName)
+                    .ThenBy(saof => saof.SpecificationAttributeOptionDisplayOrder)
+                    .ThenBy(saof => saof.SpecificationAttributeOptionName).ToList();
+
+                //prepare the model properties
+                Enabled = true;
+                FilteredItems = allFilters.Select(x =>
+                {
+                    bool selected = false;
+                    string filterUrl = "";
+                    if (alreadyFilteredSpecOptionIds.Contains(x.SpecificationAttributeOptionId))
+                    {
+                        selected = true;
+                    }
+                    //filter URL
+                    if (selected)
+                    {
+                        var alreadyFiltered = alreadyFilteredSpecOptionIds.Except(new List<int> { x.SpecificationAttributeOptionId });
+                        filterUrl = webHelper.ModifyQueryString(webHelper.GetThisPageUrl(true), QUERYSTRINGPARAM,
+                        alreadyFiltered.OrderBy(id => id).Select(id => id.ToString()).ToArray());
+                    }
+                    else
+                    {
+                        var alreadyFiltered = alreadyFilteredSpecOptionIds.Concat(new List<int> { x.SpecificationAttributeOptionId });
+                        filterUrl = webHelper.ModifyQueryString(webHelper.GetThisPageUrl(true), QUERYSTRINGPARAM,
+                        alreadyFiltered.OrderBy(id => id).Select(id => id.ToString()).ToArray());
+                    }
+                    return new SpecificationFilterItem()
+                    {
+                        SpecificationAttributeName = x.SpecificationAttributeName,
+                        SpecificationAttributeOptionName = x.SpecificationAttributeOptionName,
+                        SpecificationAttributeOptionColorRgb = x.SpecificationAttributeOptionColorRgb,
+                        FilterUrl = ExcludeQueryStringParams(filterUrl, webHelper),
+                        Selected=selected
+                    };
+                }).ToList();
+            }
 
             #endregion
 
@@ -450,6 +516,7 @@ namespace Nop.Web.Models.Catalog
             /// Already filtered items
             /// </summary>
             public IList<SpecificationFilterItem> AlreadyFilteredItems { get; set; }
+            public IList<SpecificationFilterItem> FilteredItems { get; set; }
             /// <summary>
             /// Not filtered yet items
             /// </summary>
@@ -483,6 +550,7 @@ namespace Nop.Web.Models.Catalog
             /// Filter URL
             /// </summary>
             public string FilterUrl { get; set; }
+            public bool Selected { get; set; }
         }
 
         #endregion

@@ -9,19 +9,24 @@
 }
 @if (Model.AllowCustomerReviews)
 {
-    <div class="product-reviews-overview" @if (Model.TotalReviews > 0) { <text>itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"</text>}>
-        <div class="product-review-box">
-            <div class="rating">
-                <div style="width: @(ratingPercent)%">
+    <div class="product-reviews-overview clearfix" @if (Model.TotalReviews > 0) { <text>itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating"</text>}>
+        <div class="float-left mr-3">
+            <div class="product-review-box">
+                <div class="rating">
+                    <span style="width: @(ratingPercent)%">
+                    </span>
                 </div>
             </div>
         </div>
 
-        @if (Model.TotalReviews > 0)
-        {
-            <div class="product-review-links">
-                <a href="@Url.RouteUrl("ProductReviews", new { productId = Model.ProductId })">@Model.TotalReviews
-                    @T("Reviews.Overview.Reviews")</a> <span class="separator">|</span> <a href="@Url.RouteUrl("ProductReviews", new { productId = Model.ProductId })">@T("Reviews.Overview.AddNew")</a>
+        <div class="float-left">
+            @if (Model.TotalReviews > 0)
+            {
+                <div class="product-review-links">
+                    <a href="@Url.RouteUrl("ProductReviews", new { productId = Model.ProductId })">
+                        @Model.TotalReviews
+                    @T("Reviews.Overview.Reviews")
+                </a> <span class="separator">|</span> <a href="@Url.RouteUrl("ProductReviews", new { productId = Model.ProductId })">@T("Reviews.Overview.AddNew")</a>
             </div>
             @*hidden microdata info*@
             var ratingValue = ratingPercent / (decimal)20;
@@ -31,8 +36,9 @@
         else
         {
             <div class="product-no-reviews">
-                <a href="@Url.RouteUrl("ProductReviews", new { productId = Model.ProductId })">@T("Reviews.Overview.First")</a>
+                <a href="@Url.RouteUrl("ProductReviews", new { productId = Model.ProductId })">@T("Reviews.Overview.First") <span class="mbi mbi mbi-bubbles"></span></a>
             </div>
         }
+            </div>
     </div>
 }

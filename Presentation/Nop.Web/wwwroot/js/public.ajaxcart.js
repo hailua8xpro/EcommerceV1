@@ -114,3 +114,7 @@ var AjaxCart = {
         alert('Failed to add the product. Please refresh the page and try one more time.');
     }
 };
+function deleteCartItem(id) {
+    $('#removefromcart' + id).prop('checked', true);
+    $('input[name=updatecart]').click();
+}

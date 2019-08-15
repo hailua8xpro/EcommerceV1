@@ -80,7 +80,7 @@
 }
 @section left{
     <div class="block block-filter">
-        <div class="block-title filter-title"><strong data-role="title">@T("Shop By")</strong><span class="toggle-class"></span></div>
+        <div class="block-title filter-title"><strong data-role="title">@T("ShopBy")</strong><span class="toggle-class"></span></div>
         <div class="block-content filter-content">
             <div class="filter-options">
                 @if (Model.PagingFilteringContext.PriceRangeFilter.Enabled)
@@ -129,3 +129,10 @@
         }
     </div>
 </div>
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $('.available-items ul li a:not("selected")').click(function() {
+            $(this).addClass('selected');
+        })
+    });
+</script>

@@ -184,7 +184,50 @@ namespace Nop.Web.Controllers
 
             return View(productTemplateViewPath, model);
         }
+        public virtual IActionResult PopupQuickViewProduct(int productId, int updatecartitemid = 0)
+        {
+            var product = _productService.GetProductById(productId);
+            if (product == null)
+                //no product found
+                return Json(new
+                {
+                    success = false,
+                    message = "No product found with the specified ID"
+                });
+            //update existing shopping cart or wishlist  item?
+            ShoppingCartItem updatecartitem = null;
+            if (_shoppingCartSettings.AllowCartItemEditing && updatecartitemid > 0)
+            {
+                var cart = _shoppingCartService.GetShoppingCart(_workContext.CurrentCustomer, storeId: _storeContext.CurrentStore.Id);
+                updatecartitem = cart.FirstOrDefault(x => x.Id == updatecartitemid);
+                //not found?
+                if (updatecartitem == null)
+                {
+                    return Json(new
+                    {
+                        redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    });
+                }
+                //is it this product?
+                if (product.Id != updatecartitem.ProductId)
+                {
+                    return Json(new
+                    {
+                        redirect = Url.RouteUrl("Product", new { SeName = _urlRecordService.GetSeName(product) })
+                    });
+                }
+            }
+            _recentlyViewedProductsService.AddProductToRecentlyViewedList(product.Id);
+            _customerActivityService.InsertActivity("PublicStore.ViewProduct",
+               string.Format(_localizationService.GetResource("ActivityLog.PublicStore.ViewProduct"), product.Name), product);
+            var model = _productModelFactory.PrepareProductQuickViewModel(product, updatecartitem, false);
+            return Json(new
+            {
+                success = true,
+                html = RenderPartialViewToString("_PopupQuickViewProduct", model)
+            });
 
+        }
         #endregion
 
         #region Recently viewed products

@@ -41,6 +41,7 @@
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />
     <None Remove="Themes\DefaultClean\Content\css\global.css" />
+    <None Remove="Themes\DefaultClean\Content\images\emptycart.png" />
     <None Remove="Themes\DefaultClean\Content\images\testimonial-bg.jpg" />
 
     <None Update="Areas\Admin\sitemap.config">
@@ -68,11 +69,14 @@
     <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js.map" />
     <None Include="wwwroot\lib\jquey-lazyload\jquery.lazy.min.js" />
-    <None Include="wwwroot\lib\swiper\js\swiper.esm.bundle.js" />
-    <None Include="wwwroot\lib\swiper\js\swiper.esm.js" />
-    <None Include="wwwroot\lib\swiper\js\swiper.js" />
-    <None Include="wwwroot\lib\swiper\js\swiper.min.js" />
-    <None Include="wwwroot\lib\swiper\js\swiper.min.js.map" />
+    <None Include="wwwroot\lib\slick\config.rb" />
+    <None Include="wwwroot\lib\slick\fonts\slick.svg" />
+    <None Include="wwwroot\lib\slick\slick-theme.less" />
+    <None Include="wwwroot\lib\slick\slick-theme.scss" />
+    <None Include="wwwroot\lib\slick\slick.js" />
+    <None Include="wwwroot\lib\slick\slick.less" />
+    <None Include="wwwroot\lib\slick\slick.min.js" />
+    <None Include="wwwroot\lib\slick\slick.scss" />
   </ItemGroup>
 
   <ItemGroup>

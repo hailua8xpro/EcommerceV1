@@ -1,0 +1,52 @@
+﻿@model ProductDetailsModel
+    <div class="row product-quick-view py-3">
+        <div class="col-md-6">
+            @await Html.PartialAsync("_QuickViewProductDetailsPictures", Model)
+        </div>
+        <div class="col-md-6">
+            <div class="title pb-3">
+                <div class="product-name">
+                    <h1 itemprop="name">
+                        @Model.Name
+                    </h1>
+                </div>
+                @await Html.PartialAsync("_ProductReviewOverview", Model.ProductReviewOverview)
+            </div>
+            <div class="product-info">
+                @{
+                    var dataDictPrice = new ViewDataDictionary(ViewData);
+                    dataDictPrice.TemplateInfo.HtmlFieldPrefix = $"price_{Model.Id}";
+                    @await Html.PartialAsync("_ProductPrice", Model.ProductPrice, dataDictPrice)
+                }
+                @await Html.PartialAsync("_Discontinued", Model)
+
+                @if (!string.IsNullOrEmpty(Model.ShortDescription))
+                {
+                    <div class="short-description my-3">
+                        @Html.Raw(Model.ShortDescription)
+                    </div>
+                }
+                @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
+                @await Html.PartialAsync("_Availability", Model)
+                @await Html.PartialAsync("_DeliveryInfo", Model)
+                <div class="clearfix my-3 py-3 border-top border-bottom">
+                    @{
+
+                        var dataDictAddToCart = new ViewDataDictionary(ViewData);
+                        dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                        @await Html.PartialAsync("_AddToCart", Model.AddToCart, dataDictAddToCart)
+                    }
+                    <div class="overview-buttons">
+                        @{
+                            var dataDictAddToWishlist = new ViewDataDictionary(ViewData);
+                            dataDictAddToWishlist.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                            @await Html.PartialAsync("_AddToWishlist", Model.AddToCart, dataDictAddToWishlist)
+                        }
+                        @await Html.PartialAsync("_CompareProductsButton", Model)
+                    </div>
+                </div>
+                @await Html.PartialAsync("_ShareButton", Model)
+                @await Html.PartialAsync("_ProductTags", Model.ProductTags)
+            </div>
+        </div>
+    </div>

@@ -40,8 +40,9 @@ namespace Nop.Web.Factories
         /// <param name="isAssociatedProduct">Whether the product is associated</param>
         /// <returns>Product details model</returns>
         ProductDetailsModel PrepareProductDetailsModel(Product product, ShoppingCartItem updatecartitem = null, bool isAssociatedProduct = false);
-
-        /// <summary>
+        ProductDetailsModel PrepareProductQuickViewModel(Product product,
+            ShoppingCartItem updatecartitem = null, bool isAssociatedProduct = false);
+        /// <summary>;
         /// Prepare the product reviews model
         /// </summary>
         /// <param name="model">Product reviews model</param>

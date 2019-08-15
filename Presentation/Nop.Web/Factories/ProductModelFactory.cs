@@ -1354,7 +1354,129 @@ namespace Nop.Web.Factories
 
             return model;
         }
+        public virtual ProductDetailsModel PrepareProductQuickViewModel(Product product,
+            ShoppingCartItem updatecartitem = null, bool isAssociatedProduct = false)
+        {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product));
 
+            //standard properties
+            var model = new ProductDetailsModel
+            {
+                Id = product.Id,
+                Name = _localizationService.GetLocalized(product, x => x.Name),
+                ShortDescription = _localizationService.GetLocalized(product, x => x.ShortDescription),
+                SeName = _urlRecordService.GetSeName(product),
+                ProductType = product.ProductType,
+                ShowSku = _catalogSettings.ShowSkuOnProductDetailsPage,
+                Sku = product.Sku,
+                ShowManufacturerPartNumber = _catalogSettings.ShowManufacturerPartNumber,
+                FreeShippingNotificationEnabled = _catalogSettings.ShowFreeShippingNotification,
+                ManufacturerPartNumber = product.ManufacturerPartNumber,
+                ManageInventoryMethod = product.ManageInventoryMethod,
+                StockAvailability = _productService.FormatStockMessage(product, ""),
+                DisplayDiscontinuedMessage = !product.Published && _catalogSettings.DisplayDiscontinuedMessageForUnpublishedProducts
+            };
+            //compare products
+            model.CompareProductsEnabled = _catalogSettings.CompareProductsEnabled;
+            //page sharing
+            if (_catalogSettings.ShowShareButton && !string.IsNullOrEmpty(_catalogSettings.PageShareCode))
+            {
+                var shareCode = _catalogSettings.PageShareCode;
+                if (_webHelper.IsCurrentConnectionSecured())
+                {
+                    //need to change the add this link to be https linked when the page is, so that the page doesn't ask about mixed mode when viewed in https...
+                    shareCode = shareCode.Replace("http://", "https://");
+                }
+                model.PageShareCode = shareCode;
+            }
+
+            //back in stock subscriptions
+            if (product.ManageInventoryMethod == ManageInventoryMethod.ManageStock &&
+                product.BackorderMode == BackorderMode.NoBackorders &&
+                product.AllowBackInStockSubscriptions &&
+                _productService.GetTotalStockQuantity(product) <= 0)
+            {
+                //out of stock
+                model.DisplayBackInStockSubscription = true;
+            }
+            model.DefaultPictureZoomEnabled = _mediaSettings.DefaultPictureZoomEnabled;
+            model.DefaultPictureModel = PrepareProductDetailsPictureModel(product, isAssociatedProduct, out IList<PictureModel> allPictureModels);
+            model.PictureModels = allPictureModels;
+
+            //price
+            model.ProductPrice = PrepareProductPriceModel(product);
+
+            //'Add to cart' model
+            model.AddToCart = PrepareProductAddToCartModel(product, updatecartitem);
+
+            //gift card
+            if (product.IsGiftCard)
+            {
+                model.GiftCard.IsGiftCard = true;
+                model.GiftCard.GiftCardType = product.GiftCardType;
+
+                if (updatecartitem == null)
+                {
+                    model.GiftCard.SenderName = _customerService.GetCustomerFullName(_workContext.CurrentCustomer);
+                    model.GiftCard.SenderEmail = _workContext.CurrentCustomer.Email;
+                }
+                else
+                {
+                    _productAttributeParser.GetGiftCardAttribute(updatecartitem.AttributesXml,
+                        out string giftCardRecipientName, out string giftCardRecipientEmail,
+                        out string giftCardSenderName, out string giftCardSenderEmail, out string giftCardMessage);
+
+                    model.GiftCard.RecipientName = giftCardRecipientName;
+                    model.GiftCard.RecipientEmail = giftCardRecipientEmail;
+                    model.GiftCard.SenderName = giftCardSenderName;
+                    model.GiftCard.SenderEmail = giftCardSenderEmail;
+                    model.GiftCard.Message = giftCardMessage;
+                }
+            }
+
+            //product specifications
+            //do not prepare this model for the associated products. anyway it's not used
+            if (!isAssociatedProduct)
+            {
+                model.ProductSpecifications = PrepareProductSpecificationModel(product);
+            }
+
+            //product review overview
+            model.ProductReviewOverview = PrepareProductReviewOverviewModel(product);
+            //manufacturers
+            //do not prepare this model for the associated products. anyway it's not used
+            if (!isAssociatedProduct)
+            {
+                model.ProductManufacturers = PrepareProductManufacturerModels(product);
+            }
+
+            //rental products
+            if (product.IsRental)
+            {
+                model.IsRental = true;
+                //set already entered dates attributes (if we're going to update the existing shopping cart item)
+                if (updatecartitem != null)
+                {
+                    model.RentalStartDate = updatecartitem.RentalStartDateUtc;
+                    model.RentalEndDate = updatecartitem.RentalEndDateUtc;
+                }
+            }
+
+            //associated products
+            if (product.ProductType == ProductType.GroupedProduct)
+            {
+                //ensure no circular references
+                if (!isAssociatedProduct)
+                {
+                    var associatedProducts = _productService.GetAssociatedProducts(product.Id, _storeContext.CurrentStore.Id);
+                    foreach (var associatedProduct in associatedProducts)
+                        model.AssociatedProducts.Add(PrepareProductDetailsModel(associatedProduct, null, true));
+                }
+            }
+
+            return model;
+        }
         /// <summary>
         /// Prepare the product reviews model
         /// </summary>

@@ -324,6 +324,10 @@ namespace Nop.Core
 
             //and add passed one
             queryParameters[key] = string.Join(",", values);
+            if (string.IsNullOrEmpty(queryParameters[key]))
+            {
+                queryParameters.Remove(key);
+            }
 
             //add only first value
             //two the same query parameters? theoretically it's not possible.

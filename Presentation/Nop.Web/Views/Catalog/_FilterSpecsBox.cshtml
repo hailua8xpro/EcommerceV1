@@ -1,19 +1,15 @@
 ﻿@model CatalogPagingFilteringModel.SpecificationFilterModel
 @{
-    var notFilteredItemsGroups = Model.NotFilteredItems.GroupBy(x => x.SpecificationAttributeName);
-    var alreadyFilteredItemsGroups = Model.AlreadyFilteredItems.GroupBy(x => x.SpecificationAttributeName);
+    var filteredItemsGroups = Model.FilteredItems.GroupBy(x => x.SpecificationAttributeName);
 }
 @if (Model.Enabled)
 {
     <div class="product-filter product-spec-filter">
-        <div class="filter-title">
-            <strong>@T("Filtering.SpecificationFilter")</strong>
-        </div>
         <div class="filter-content">
-            @if (Model.NotFilteredItems.Count > 0)
+            @if (Model.FilteredItems.Count > 0)
             {
                 <div class="available-items">
-                    @foreach (var group in notFilteredItemsGroups)
+                    @foreach (var group in filteredItemsGroups)
                     {
                         var groupList = group.ToList();
                         
@@ -24,7 +20,7 @@
                             @foreach (var spec in groupList)
                             {
                                 <li class="item @(!string.IsNullOrEmpty(spec.SpecificationAttributeOptionColorRgb) ? "color-item" : null)">
-                                    <a href="@spec.FilterUrl">
+                                    <a class="@(spec.Selected?"selected":string.Empty)" href="@spec.FilterUrl">
                                         @if (string.IsNullOrEmpty(spec.SpecificationAttributeOptionColorRgb))
                                         {
                                             @spec.SpecificationAttributeOptionName
@@ -42,27 +38,6 @@
                             }
                         </ul>
                     }
-                </div>
-            }
-            @if (Model.AlreadyFilteredItems.Count > 0)
-            {
-                <div class="filtered-items">
-                    <ul>
-                        <li class="title">
-                            @T("Filtering.SpecificationFilter.CurrentlyFilteredBy")
-                        </li>
-                        @foreach (var group in alreadyFilteredItemsGroups)
-                        {
-                            <li class="item">
-                                <strong>@group.First().SpecificationAttributeName</strong>:
-                                @group.ToList().Aggregate(string.Empty, (current, next) =>
-                                    $"{(string.IsNullOrEmpty(current) ? string.Empty : $"{current} {T("Filtering.SpecificationFilter.Separator")} ")}{next.SpecificationAttributeOptionName}")
-                            </li>
-                        }
-                    </ul>
-                </div>
-                <div class="remove-filter">
-                    <a href="@Model.RemoveFilterUrl">@T("Filtering.SpecificationFilter.Remove")</a>
                 </div>
             }
         </div>

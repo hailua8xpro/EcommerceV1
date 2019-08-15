@@ -49,8 +49,8 @@
                     </div>
                 }
 
-                <div class="col">
-                    <a href="javascript:" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">
+                <div class="col d-none d-md-block">
+                    <a href="javascript:" onclick="showQuickViewProduct('@Url.RouteUrl("QuickViewProduct", new {productId= Model.Id})')" title="@T("ProductItem.QuickView")" data-toggle="tooltip" data-placement="top">
                         <span class="mbi mbi-eye"></span>
                     </a>
                 </div>
@@ -98,9 +98,6 @@
                     </div>
             </div>
         }
-        <div class="description">
-            @Html.Raw(Model.ShortDescription)
-        </div>
         <div class="add-info">
             <div class="prices">
                 <span class="price @(!string.IsNullOrEmpty(Model.ProductPrice.OldPrice)?"actual-price":"normal-price") ">@Model.ProductPrice.Price</span>
