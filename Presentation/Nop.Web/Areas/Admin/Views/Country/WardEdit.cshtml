@@ -1,0 +1,28 @@
+@model WardModel
+
+@{
+    //page title
+    ViewBag.Title = T("Admin.Configuration.Wards.EditWardtDetails").Text;
+    Html.SetActiveMenuItemSystemName("Countries");
+}
+
+<form asp-controller="Country" asp-action="WardEdit"
+      asp-route-btnId="@Context.Request.Query["btnId"]"
+      asp-route-formId="@Context.Request.Query["formId"]">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Configuration.Wards.EditWardtDetails")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a href="@Url.Content("~/Admin/Country/DistrictEdit/"+Model.DistrictId)">@T("Admin.Configuration.Wards.BackToList")</a>
+            </small>
+        </h1>
+        <div class="pull-right">
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdateWard", Model)
+</form>

@@ -72,8 +72,7 @@ namespace Nop.Services.News
             string keywords = null,
             bool searchDescriptions = false,
             int languageId = 0,
-            bool showHidden = false,
-            ProductSortingEnum orderBy = ProductSortingEnum.CreatedOn);
+            bool showHidden = false);
         #endregion
 
         #region News comments

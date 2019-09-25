@@ -5,6 +5,7 @@ using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
@@ -20,6 +21,7 @@ using Nop.Services.Seo;
 using Nop.Services.Shipping;
 using Nop.Services.Vendors;
 using Nop.Web.Models.Common;
+using Nop.Web.Models.Media;
 using Nop.Web.Models.Order;
 
 namespace Nop.Web.Factories
@@ -58,6 +60,10 @@ namespace Nop.Web.Factories
         private readonly ShippingSettings _shippingSettings;
         private readonly TaxSettings _taxSettings;
         private readonly VendorSettings _vendorSettings;
+        private readonly IPictureService _pictureService;
+        private readonly MediaSettings _mediaSettings;
+
+
 
         #endregion
 
@@ -89,7 +95,9 @@ namespace Nop.Web.Factories
             RewardPointsSettings rewardPointsSettings,
             ShippingSettings shippingSettings,
             TaxSettings taxSettings,
-            VendorSettings vendorSettings)
+            VendorSettings vendorSettings,
+            IPictureService pictureService,
+            MediaSettings mediaSettings)
         {
             _addressSettings = addressSettings;
             _catalogSettings = catalogSettings;
@@ -118,6 +126,8 @@ namespace Nop.Web.Factories
             _shippingSettings = shippingSettings;
             _taxSettings = taxSettings;
             _vendorSettings = vendorSettings;
+            _pictureService = pictureService;
+            _mediaSettings = mediaSettings;
         }
 
         #endregion
@@ -401,6 +411,11 @@ namespace Nop.Web.Factories
 
             foreach (var orderItem in orderItems)
             {
+                var picture = _pictureService.GetPicturesByProductId(orderItem.Product.Id, 1).FirstOrDefault();
+                if (picture==null)
+                {
+                    picture = new Core.Domain.Media.Picture();
+                }
                 var orderItemModel = new OrderDetailsModel.OrderItemModel
                 {
                     Id = orderItem.Id,
@@ -412,6 +427,10 @@ namespace Nop.Web.Factories
                     ProductSeName = _urlRecordService.GetSeName(orderItem.Product),
                     Quantity = orderItem.Quantity,
                     AttributeInfo = orderItem.AttributeDescription,
+                    Picture=new PictureModel
+                    {
+                        ImageUrl= _pictureService.GetPictureUrl(picture, _mediaSettings.CartThumbPictureSize, true),
+                    }
                 };
                 //rental info
                 if (orderItem.Product.IsRental)

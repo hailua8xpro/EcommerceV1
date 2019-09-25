@@ -1,0 +1,93 @@
+﻿@using Nop.Core.Domain.Common
+@inject CommonSettings commonSettings
+@model NewsCategoryModel
+@{
+    Layout = "_ColumnsTwoNews";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.NewsArchive").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-news-list-page");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+}
+@section Breadcrumb{
+    <div class="breadcrumb">
+        <div class="container">
+            <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                <li>
+                    <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li>
+                    <a href="@Url.RouteUrl("NewsArchive")">@T("News")</a>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                @{ int position = 1; }
+                @foreach (var cat in Model.NewsCategoryBreadcrumb)
+                {
+                    var isLastCategory = cat.Id == Model.Id;
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        @if (isLastCategory)
+                        {
+                            <strong class="current-item" itemprop="name">@cat.Name</strong>
+                            <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
+                                  id="@Url.RouteUrl("NewsCategory", new {SeName = cat.SeName})">
+                            </span>
+                        }
+                        else
+                        {
+                            <a href="@Url.RouteUrl("NewsCategory", new { SeName = cat.SeName })" title="@cat.Name" itemprop="item">
+                                <span itemprop="name">@cat.Name</span>
+                            </a>
+                            <span class="delimiter">@breadcrumbDelimiter</span>
+                        }
+                        <meta itemprop="position" content="@position" />
+                    </li>
+                    position++;
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section right{
+    @await Component.InvokeAsync("NewsCategoryNavigation", new { currentCategoryId = 0, currentNewsId = 0 })
+
+}
+
+@section categorytitle{
+    <div class="page-title">
+        <h1 class="h3 mb-3">@Model.Name</h1>
+    </div>
+}
+<div class="page news-list-page">
+    <div class="page-body">
+        <div class="news-items row">
+            @foreach (var item in Model.NewsItems)
+            {
+                <div class="col-md-6">
+                    <div class="news-item">
+                        <div class="news-head">
+                            <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })"><img class="lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Title" /></a>
+                        </div>
+                        <h3 class="title">
+                            <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a>
+                        </h3>
+                        <div class="post-posed-date">
+                            <span class="news-date">@item.CreatedOn.ToString("D")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+    </div>
+</div>

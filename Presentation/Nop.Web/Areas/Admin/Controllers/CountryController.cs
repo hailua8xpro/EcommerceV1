@@ -39,7 +39,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly IStateProvinceService _stateProvinceService;
         private readonly IStoreMappingService _storeMappingService;
         private readonly IStoreService _storeService;
-
+        const int VietNamCountryId = 82;
         #endregion
 
         #region Ctor
@@ -136,13 +136,22 @@ namespace Nop.Web.Areas.Admin.Controllers
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
-
+            // hard code to redirect sate province
+            var vietnam = _countryService.GetCountryById(VietNamCountryId);
+            if (vietnam == null)
+            {
+                return AccessDeniedView();
+            }
+            else
+            {
+                return RedirectToAction("StateList", new { countryId = vietnam.Id });
+            }
             //prepare model
             var model = _countryModelFactory.PrepareCountrySearchModel(new CountrySearchModel());
 
             return View(model);
         }
-
+       
         [HttpPost]
         public virtual IActionResult CountryList(CountrySearchModel searchModel)
         {
@@ -191,7 +200,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 if (!continueEditing)
                     return RedirectToAction("List");
-                
+
                 return RedirectToAction("Edit", new { id = country.Id });
             }
 
@@ -248,7 +257,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 if (!continueEditing)
                     return RedirectToAction("List");
-                
+
                 return RedirectToAction("Edit", new { id = country.Id });
             }
 
@@ -331,11 +340,22 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         #endregion
-        
+
         #region States / provinces
 
 
+        public virtual IActionResult StateList(int countryId)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
+                return AccessDeniedView();
+            var country = _countryService.GetCountryById(countryId);
+            if (country == null)
+                return RedirectToAction("List");
+            //prepare model
+            var model = _countryModelFactory.PrepareStateProvinceSearchModel(new StateProvinceSearchModel { CountryId = country.Id }, country);
 
+            return View(model);
+        }
         [HttpPost]
         public virtual IActionResult States(StateProvinceSearchModel searchModel)
         {
@@ -366,24 +386,9 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             return View(model);
         }
-        public virtual IActionResult StateCreatePopup(int countryId)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
-                return AccessDeniedView();
-
-            //try to get a country with the specified id
-            var country = _countryService.GetCountryById(countryId);
-            if (country == null)
-                return RedirectToAction("List");
-
-            //prepare model
-            var model = _countryModelFactory.PrepareStateProvinceModel(new StateProvinceModel(), country, null);
-
-            return View(model);
-        }
 
         [HttpPost]
-        public virtual IActionResult StateCreatePopup(StateProvinceModel model)
+        public virtual IActionResult StateCreate(StateProvinceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -436,29 +441,8 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             return View(model);
         }
-        public virtual IActionResult StateEditPopup(int id)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
-                return AccessDeniedView();
-
-            //try to get a state with the specified id
-            var state = _stateProvinceService.GetStateProvinceById(id);
-            if (state == null)
-                return RedirectToAction("List");
-
-            //try to get a country with the specified id
-            var country = _countryService.GetCountryById(state.CountryId);
-            if (country == null)
-                return RedirectToAction("List");
-
-            //prepare model
-            var model = _countryModelFactory.PrepareStateProvinceModel(null, country, state);
-
-            return View(model);
-        }
-
         [HttpPost]
-        public virtual IActionResult StateEditPopup(StateProvinceModel model)
+        public virtual IActionResult StateEdit(StateProvinceModel model)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
                 return AccessDeniedView();
@@ -642,6 +626,40 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
+        public virtual IActionResult DistrictEdit(DistrictModel model)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
+                return AccessDeniedView();
+
+            //try to get a state with the specified id
+            var district = _stateProvinceService.GetDistrictById(model.Id);
+            if (district == null)
+                return RedirectToAction("List");
+
+            //try to get a country with the specified id
+            var province = _stateProvinceService.GetStateProvinceById(district.StateProvinceId);
+            if (province == null)
+                return RedirectToAction("List");
+
+            if (ModelState.IsValid)
+            {
+                district = model.ToEntity(district);
+                _stateProvinceService.UpdateDistrict(district);
+
+                //activity log
+                _customerActivityService.InsertActivity("EditDistrict",
+                    string.Format(_localizationService.GetResource("ActivityLog.EditDistrict"), district.Id), district);
+                ViewBag.RefreshPage = true;
+                return View(model);
+            }
+
+            //prepare model
+            model = _countryModelFactory.PrepareDistrictModel(model, province, district);
+
+            //if we got this far, something failed, redisplay form
+            return View(model);
+        }
+        [HttpPost]
         public virtual IActionResult Districts(DistrictSearchModel searchModel)
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
@@ -693,8 +711,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 //activity log
                 _customerActivityService.InsertActivity("AddNewWard",
                     string.Format(_localizationService.GetResource("ActivityLog.AddNewWard"), ward.Id), ward);
-                ViewBag.RefreshPage = true;
-                return View(model);
+                return RedirectToAction("DistrictEdit", new { id = district.Id });
             }
 
             //prepare model
@@ -721,6 +738,41 @@ namespace Nop.Web.Areas.Admin.Controllers
             //prepare model
             var model = _countryModelFactory.PrepareWardModel(null, district, ward);
 
+            return View(model);
+        }
+
+        [HttpPost]
+        public virtual IActionResult WardEdit(WardModel model)
+        {
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCountries))
+                return AccessDeniedView();
+
+            //try to get a state with the specified id
+            var ward = _stateProvinceService.GetWardById(model.Id);
+            if (ward == null)
+                return RedirectToAction("List");
+
+            //try to get a country with the specified id
+            var district = _stateProvinceService.GetDistrictById(ward.DistrictId);
+            if (district == null)
+                return RedirectToAction("List");
+
+            if (ModelState.IsValid)
+            {
+                ward = model.ToEntity(ward);
+                _stateProvinceService.UpdateWard(ward);
+
+                //activity log
+                _customerActivityService.InsertActivity("EditWard",
+                    string.Format(_localizationService.GetResource("ActivityLog.EditWard"), ward.Id), ward);
+                ViewBag.RefreshPage = true;
+                return View(model);
+            }
+
+            //prepare model
+            model = _countryModelFactory.PrepareWardModel(model, district, ward);
+
+            //if we got this far, something failed, redisplay form
             return View(model);
         }
         [HttpPost]

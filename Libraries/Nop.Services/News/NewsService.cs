@@ -194,8 +194,7 @@ namespace Nop.Services.News
           string keywords = null,
           bool searchDescriptions = false,
           int languageId = 0,
-          bool showHidden = false,
-          ProductSortingEnum orderBy = ProductSortingEnum.CreatedOn)
+          bool showHidden = false)
         {
             if (categoryIds != null && categoryIds.Contains(0))
                 categoryIds.Remove(0);
@@ -215,7 +214,7 @@ namespace Nop.Services.News
             var pUseFullTextSearch = _dataProvider.GetBooleanParameter("UseFullTextSearch", _commonSettings.UseFullTextSearch);
             var pFullTextMode = _dataProvider.GetInt32Parameter("FullTextMode", (int)_commonSettings.FullTextMode);
             var pLanguageId = _dataProvider.GetInt32Parameter("LanguageId", languageId);
-            var pOrderBy = _dataProvider.GetInt32Parameter("OrderBy", (int)orderBy);
+            var pOrderBy = _dataProvider.GetInt32Parameter("OrderBy", (int)ProductSortingEnum.Position);
             var pPageIndex = _dataProvider.GetInt32Parameter("PageIndex", pageIndex);
             var pPageSize = _dataProvider.GetInt32Parameter("PageSize", pageSize);
             var pShowHidden = _dataProvider.GetBooleanParameter("ShowHidden", showHidden);

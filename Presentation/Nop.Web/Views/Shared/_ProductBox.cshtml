@@ -50,7 +50,7 @@
                 }
 
                 <div class="col d-none d-md-block">
-                    <a href="javascript:" onclick="showQuickViewProduct('@Url.RouteUrl("QuickViewProduct", new {productId= Model.Id})')" title="@T("ProductItem.QuickView")" data-toggle="tooltip" data-placement="top">
+                    <a href="javascript:" onclick="showQuickViewProduct('@Url.RouteUrl("QuickViewProduct", new {productId= Model.Id})',this)" title="@T("ProductItem.QuickView")" data-toggle="tooltip" data-placement="top">
                         <span class="mbi mbi-eye"></span>
                     </a>
                 </div>

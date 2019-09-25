@@ -2,9 +2,10 @@
 
 @{
     ViewBag.Title = T("Admin.Configuration.Countries.States.AddNew").Text;
+    Html.SetActiveMenuItemSystemName("Countries");
 }
 
-<form asp-controller="Country" asp-action="StateCreatePopup"
+<form asp-controller="Country" asp-action="StateCreate"
       asp-route-countryId="@Context.Request.Query["countryId"]"
       asp-route-btnId="@Context.Request.Query["btnId"]"
       asp-route-formId="@Context.Request.Query["formId"]">

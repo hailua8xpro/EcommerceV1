@@ -176,8 +176,8 @@ namespace Nop.Services.Common
             if (address == null)
                 throw new ArgumentNullException(nameof(address));
 
-            if (string.IsNullOrWhiteSpace(address.FirstName))
-                return false;
+            //if (string.IsNullOrWhiteSpace(address.FirstName))
+            //    return false;
 
             if (string.IsNullOrWhiteSpace(address.LastName))
                 return false;
@@ -282,7 +282,7 @@ namespace Nop.Services.Common
         /// <param name="customAttributes">Custom address attributes (XML format)</param>
         /// <returns>Address</returns>
         public virtual Address FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
-            string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId,
+            string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId, int? districtId, int? wardId,
             string zipPostalCode, int? countryId, string customAttributes)
         {
             return source.Find(a => ((string.IsNullOrEmpty(a.FirstName) && string.IsNullOrEmpty(firstName)) || a.FirstName == firstName) &&
@@ -296,6 +296,8 @@ namespace Nop.Services.Common
             ((string.IsNullOrEmpty(a.City) && string.IsNullOrEmpty(city)) || a.City == city) &&
             ((string.IsNullOrEmpty(a.County) && string.IsNullOrEmpty(county)) || a.County == county) &&
             ((a.StateProvinceId == null && (stateProvinceId == null || stateProvinceId == 0)) || (a.StateProvinceId != null && a.StateProvinceId == stateProvinceId)) &&
+            ((a.DistrictId == null && (districtId == null || districtId == 0)) || (a.DistrictId != null && a.DistrictId == districtId)) &&
+            ((a.WardId == null && (wardId == null || wardId == 0)) || (a.WardId != null && a.WardId == wardId)) &&
             ((string.IsNullOrEmpty(a.ZipPostalCode) && string.IsNullOrEmpty(zipPostalCode)) || a.ZipPostalCode == zipPostalCode) &&
             ((a.CountryId == null && countryId == null) || (a.CountryId !=null && a.CountryId == countryId)) &&
             //actually we should parse custom address attribute (in case if "Display order" is changed) and then compare

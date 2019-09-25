@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Models;
+using Nop.Core.Domain.Stores;
 
 namespace Nop.Web.Models.Common
 {
@@ -9,7 +10,7 @@ namespace Nop.Web.Models.Common
         [DataType(DataType.EmailAddress)]
         [NopResourceDisplayName("ContactUs.Email")]
         public string Email { get; set; }
-        
+
         [NopResourceDisplayName("ContactUs.Subject")]
         public string Subject { get; set; }
         public bool SubjectEnabled { get; set; }
@@ -24,5 +25,7 @@ namespace Nop.Web.Models.Common
         public string Result { get; set; }
 
         public bool DisplayCaptcha { get; set; }
+        public Store CurrentStore { get; set; }
+
     }
 }

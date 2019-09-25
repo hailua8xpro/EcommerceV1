@@ -501,7 +501,7 @@ namespace Nop.Web.Factories
             }
             model.SubjectEnabled = _commonSettings.SubjectFieldOnContactUsForm;
             model.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnContactUsPage;
-
+            model.CurrentStore = _storeContext.CurrentStore;
             return model;
         }
 

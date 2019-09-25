@@ -27,7 +27,12 @@ namespace Nop.Data.Mapping.Common
             builder.HasOne(address => address.StateProvince)
                 .WithMany()
                 .HasForeignKey(address => address.StateProvinceId);
-
+            builder.HasOne(address => address.District)
+                .WithMany()
+                .HasForeignKey(address => address.DistrictId);
+            builder.HasOne(address => address.Ward)
+                .WithMany()
+                .HasForeignKey(address => address.WardId);
             base.Configure(builder);
         }
 

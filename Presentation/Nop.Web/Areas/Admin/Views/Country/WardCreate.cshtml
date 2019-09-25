@@ -1,16 +1,21 @@
 @model WardModel
 
 @{
-    ViewBag.Title = T("Admin.Configuration.Countries.Wards.AddNew").Text;
+    ViewBag.Title = T("Admin.Configuration.Wards.AddNew").Text;
+    Html.SetActiveMenuItemSystemName("Countries");
 }
 
-<form asp-controller="Country" asp-action="DistrictCreate"
+<form asp-controller="Country" asp-action="WardCreate"
       asp-route-stateProvinceId="@Context.Request.Query["districtId"]"
       asp-route-btnId="@Context.Request.Query["btnId"]"
       asp-route-formId="@Context.Request.Query["formId"]">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("Admin.Configuration.Countries.Wards.AddNew")
+            @T("Admin.Configuration.Wards.AddNew")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a href="@Url.Content("~/Admin/Country/DistrictEdit/"+Model.DistrictId)">@T("Admin.Configuration.Wards.BackToList")</a>
+            </small>
         </h1>
         <div class="pull-right">
             <button type="submit" name="save" class="btn bg-blue">

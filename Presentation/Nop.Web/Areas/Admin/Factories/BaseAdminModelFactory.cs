@@ -20,6 +20,7 @@ using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
+using Nop.Services.News;
 using Nop.Services.Plugins;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Date;
@@ -39,6 +40,7 @@ namespace Nop.Web.Areas.Admin.Factories
         #region Fields
 
         private readonly ICategoryService _categoryService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly ICategoryTemplateService _categoryTemplateService;
         private readonly ICountryService _countryService;
         private readonly ICurrencyService _currencyService;
@@ -86,7 +88,8 @@ namespace Nop.Web.Areas.Admin.Factories
             IStoreService storeService,
             ITaxCategoryService taxCategoryService,
             ITopicTemplateService topicTemplateService,
-            IVendorService vendorService)
+            IVendorService vendorService,
+            INewsCategoryService newsCategoryService)
         {
             _categoryService = categoryService;
             _categoryTemplateService = categoryTemplateService;
@@ -110,6 +113,7 @@ namespace Nop.Web.Areas.Admin.Factories
             _taxCategoryService = taxCategoryService;
             _topicTemplateService = topicTemplateService;
             _vendorService = vendorService;
+            _newsCategoryService = newsCategoryService;
         }
 
         #endregion
@@ -431,7 +435,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available categories
-            var availableCategoryItems = SelectListHelper.GetCategoryList(_categoryService, _cacheManager, true);
+            var availableCategoryItems = SelectListHelper.GetNewsCategoryList(_newsCategoryService, _cacheManager, true);
             foreach (var categoryItem in availableCategoryItems)
             {
                 items.Add(categoryItem);

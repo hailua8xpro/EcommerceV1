@@ -15,7 +15,7 @@ namespace Nop.Web.Factories
     /// </summary>
     public partial class CountryModelFactory : ICountryModelFactory
     {
-		#region Fields
+        #region Fields
 
         private readonly ICountryService _countryService;
         private readonly ILocalizationService _localizationService;
@@ -23,9 +23,9 @@ namespace Nop.Web.Factories
         private readonly IStaticCacheManager _cacheManager;
         private readonly IWorkContext _workContext;
 
-	    #endregion
+        #endregion
 
-		#region Ctor
+        #region Ctor
 
         public CountryModelFactory(ICountryService countryService,
 
@@ -120,6 +120,83 @@ namespace Nop.Web.Factories
             return cachedModel;
         }
 
+
+        public IList<DistrictModel> GetDistrictsByStateId(string stateId)
+        {
+            if (string.IsNullOrEmpty(stateId))
+                throw new ArgumentNullException(nameof(stateId));
+
+            var cacheKey = string.Format(NopModelCacheDefaults.DistrictsByStateModelKey, stateId, _workContext.WorkingLanguage.Id);
+            var cachedModel = _cacheManager.Get(cacheKey, () =>
+            {
+                var districts = _stateProvinceService.GetDistrictsByStateProvinceId(Convert.ToInt32(stateId));
+                var result = new List<DistrictModel>();
+                foreach (var state in districts)
+                    result.Add(new DistrictModel
+                    {
+                        id = state.Id,
+                        name = state.Name
+                    });
+
+                if (!result.Any())
+                {
+                    result.Insert(0, new DistrictModel
+                    {
+                        id = 0,
+                        name = _localizationService.GetResource("Address.DataUpdating")
+                    });
+                }
+                else
+                {
+                    result.Insert(0, new DistrictModel
+                    {
+                        id = 0,
+                        name = _localizationService.GetResource("Address.SelectDistrict")
+                    });
+                }
+
+                return result;
+            });
+            return cachedModel;
+        }
+        public IList<WardModel> GetWardsByDistrictId(string districtId)
+        {
+            if (string.IsNullOrEmpty(districtId))
+                throw new ArgumentNullException(nameof(districtId));
+
+            var cacheKey = string.Format(NopModelCacheDefaults.WardsByDistrictModelKey, districtId, _workContext.WorkingLanguage.Id);
+            var cachedModel = _cacheManager.Get(cacheKey, () =>
+            {
+                var wards = _stateProvinceService.GetWardsByDistrictId(Convert.ToInt32(districtId));
+                var result = new List<WardModel>();
+                foreach (var state in wards)
+                    result.Add(new WardModel
+                    {
+                        id = state.Id,
+                        name = state.Name
+                    });
+
+                if (!result.Any())
+                {
+                    result.Insert(0, new WardModel
+                    {
+                        id = 0,
+                        name = _localizationService.GetResource("Address.DataUpdating")
+                    });
+                }
+                else
+                {
+                    result.Insert(0, new WardModel
+                    {
+                        id = 0,
+                        name = _localizationService.GetResource("Address.SelectWard")
+                    });
+                }
+
+                return result;
+            });
+            return cachedModel;
+        }
         #endregion
     }
 }

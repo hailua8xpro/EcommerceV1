@@ -499,6 +499,7 @@
         public static string HomepageNewsModelKey => "Nop.pres.news.homepage-{0}-{1}";
         public static string NewsPrefixCacheKey => "Nop.pres.news";
 
+
         public static string BannerModelKey => "Nop.pres.banner-{0}-{1}";
         public static string BannerPrefixCacheKey => "Nop.pres.banner";
         /// <summary>
@@ -511,7 +512,13 @@
         /// </remarks>
         public static string NewsCommentsNumberKey => "Nop.pres.news.comments.number-{0}-{1}-{2}";
         public static string NewsCommentsPrefixCacheKey => "Nop.pres.news.comments";
+        public static string NewsCategoryAllModelKey => "Nop.pres.newscategory.all-{0}-{1}-{2}";
+        public static string NewsCategoryAllPrefixCacheKey => "Nop.pres.newscategory.all";
+        public static string NewsCategorySubcategoriesKey => "Nop.pres.newscategory.subcategories-{0}-{1}-{2}-{3}-{4}";
 
+        public static string NewsItemBreadcrumbModelKey => "Nop.pres.newsitem.breadcrumb-{0}-{1}-{2}-{3}";
+        public static string NewsItemBreadcrumbPrefixCacheKey => "Nop.pres.newsitem.breadcrumb";
+        public static string NewsItemBreadcrumbPrefixCacheKeyById => "Nop.pres.newsitem.breadcrumb-{0}-";
         /// <summary>
         /// Key for states by country id
         /// </summary>
@@ -520,8 +527,12 @@
         /// {1} : "empty" or "select" item
         /// {2} : language ID
         /// </remarks>
+        public static string WardsByDistrictModelKey => "Nop.pres.wards.bydistrict-{0}-{1}";
+        public static string DistrictsByStateModelKey => "Nop.pres.districts.byprovince-{0}-{1}";
         public static string StateProvincesByCountryModelKey => "Nop.pres.stateprovinces.bycountry-{0}-{1}-{2}";
         public static string StateProvincesPrefixCacheKey => "Nop.pres.stateprovinces";
+        public static string DistrictsPrefixCacheKey => "Nop.pres.districts";
+        public static string WardsPrefixCacheKey => "Nop.pres.wards";
 
         /// <summary>
         /// Key for return request reasons

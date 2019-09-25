@@ -2,7 +2,8 @@
 
 @{
     //page title
-    ViewBag.Title = T("Admin.Configuration.Countries.States.EditStateDetails").Text;
+    ViewBag.Title = T("Admin.Configuration.Districts.EditDistrictDetails").Text;
+    Html.SetActiveMenuItemSystemName("Countries");
 }
 
 <form asp-controller="Country" asp-action="DistrictEdit"
@@ -10,7 +11,11 @@
       asp-route-formId="@Context.Request.Query["formId"]">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("Admin.Configuration.Countries.States.EditStateDetails")
+            @T("Admin.Configuration.Districts.EditDistrictDetails")
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a href="@Url.Content("~/Admin/Country/StateEdit/"+Model.StateProvinceId)">@T("Admin.Configuration.Districts.BackToList")</a>
+            </small>
         </h1>
         <div class="pull-right">
             <button type="submit" name="save" class="btn bg-blue">

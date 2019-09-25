@@ -29,6 +29,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly INewsModelFactory _newsModelFactory;
         private readonly INewsService _newsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly INotificationService _notificationService;
         private readonly IPermissionService _permissionService;
         private readonly IStoreMappingService _storeMappingService;
@@ -50,7 +51,8 @@ namespace Nop.Web.Areas.Admin.Controllers
             IStoreMappingService storeMappingService,
             IStoreService storeService,
             IUrlRecordService urlRecordService,
-            IPictureService pictureService)
+            IPictureService pictureService,
+            INewsCategoryService newsCategoryService)
         {
             _customerActivityService = customerActivityService;
             _eventPublisher = eventPublisher;
@@ -63,6 +65,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             _storeService = storeService;
             _urlRecordService = urlRecordService;
             _pictureService = pictureService;
+            _newsCategoryService = newsCategoryService;
         }
 
         #endregion
@@ -98,7 +101,30 @@ namespace Nop.Web.Areas.Admin.Controllers
                 }
             }
         }
+        protected virtual void SaveCategoryMappings(NewsItem newsItem, NewsItemModel model)
+        {
+            var existingNewsCategoryMapping = _newsCategoryService.GetNewsCategoryMappingsByNewsId(newsItem.Id, true);
 
+            //delete categories
+            foreach (var ncm in existingNewsCategoryMapping)
+                if (!model.SelectedCategoryIds.Contains(ncm.NewsCategoryId))
+                    _newsCategoryService.DeleteNewsCategoryMapping(ncm);
+
+            //add categories
+            foreach (var categoryId in model.SelectedCategoryIds)
+            {
+                if (_newsCategoryService.FindNewsCategoryMapping(existingNewsCategoryMapping, newsItem.Id, categoryId) == null)
+                {
+                    //find next display order
+                    var existingCategoryMapping = _newsCategoryService.GetNewsCategoryMappingsByCategoryId(categoryId, showHidden: true);
+                    _newsCategoryService.InsertNewsCategoryMapping(new NewsCategoryMapping
+                    {
+                       NewsId= newsItem.Id,
+                       NewsCategoryId= categoryId
+                    });
+                }
+            }
+        }
         #endregion
 
         #region Methods        
@@ -234,7 +260,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
                 //stores
                 SaveStoreMappings(newsItem, model);
-
+                SaveCategoryMappings(newsItem, model);
                 _notificationService.SuccessNotification(_localizationService.GetResource("Admin.ContentManagement.News.NewsItems.Updated"));
 
                 if (!continueEditing)

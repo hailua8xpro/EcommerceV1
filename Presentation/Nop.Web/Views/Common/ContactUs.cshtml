@@ -1,4 +1,6 @@
-﻿@model ContactUsModel
+﻿@using Nop.Core.Domain.Common
+@inject CommonSettings commonSettings
+@model ContactUsModel
 @{
     Layout = "_ColumnsOne";
 
@@ -6,66 +8,105 @@
     Html.AddTitleParts(T("PageTitle.ContactUs").Text);
     //page class
     Html.AppendPageCssClassParts("html-contact-page");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+}
+@section Breadcrumb{
+    <div class="breadcrumb">
+        <div class="container">
+            <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                <li>
+                    <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <strong class="current-item" itemprop="name">@T("PageTitle.ContactUs")</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
 }
 <div class="page contact-page">
-    <div class="page-title">
-        <h1>@T("PageTitle.ContactUs")</h1>
-    </div>
-    <div class="page-body">
-        @await Component.InvokeAsync("TopicBlock", new { systemName = "ContactUs" })
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContactUsTop })
-        @if (Model.SuccessfullySent)
-        {
-            <div class="result">
-                @Model.Result
+    <div class="container">
+        <div class="page-title">
+            <h1 class="h3">@T("PageTitle.ContactUs")</h1>
+        </div>
+        
+        <div class="page-body mt-3">
+            <div class="row">
+                <div class="col-md-5">
+                    @if (Model.SuccessfullySent)
+                    {
+                        <div class="result">
+                            @Model.Result
+                        </div>
+                    }
+                    else
+                    {
+                        if (Model.CurrentStore != null)
+                        {
+                            <div class="mb-4"><div><h4>@Model.CurrentStore.CompanyName</h4></div>
+                            <div><strong>@T("address")</strong>: @Model.CurrentStore.CompanyAddress</div>
+                            <div><strong>@T("phone")</strong>: @Model.CurrentStore.CompanyPhoneNumber</div></div>
+                        }
+                        <form asp-route="ContactUs" method="post">
+                            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                            <div class="fieldset">
+                                <div class="form-fields">
+                                    <div class="inputs row mb-3">
+                                        <div class="col-md-3"><label asp-for="FullName" asp-postfix=":"></label></div>
+                                        <div class="col-md-9">
+                                            <input asp-for="FullName" placeholder="@T("ContactUs.FullName.Hint")" class="form-control fullname with-required" />
+                                            <nop-required />
+                                            <span asp-validation-for="FullName"></span>
+                                        </div>
+                                    </div>
+                                    <div class="inputs row mb-3">
+                                        <div class="col-md-3"><label asp-for="Email" asp-postfix=":"></label></div>
+                                        <div class="col-md-9">
+                                            <input asp-for="Email" placeholder="@T("ContactUs.Email.Hint")" class="form-control with-required email" />
+                                            <nop-required />
+                                            <span asp-validation-for="Email"></span>
+                                        </div>
+                                    </div>
+                                    @if (Model.SubjectEnabled)
+                                    {
+                                        <div class="inputs row mb-3">
+                                            <div class="col-md-3"><label asp-for="Subject" asp-postfix=":"></label></div>
+                                            <div class="col-md-9">
+                                                <input asp-for="Subject" placeholder="@T("ContactUs.Subject.Hint")" class="subject form-control with-required" />
+                                                <nop-required />
+                                                <span asp-validation-for="Subject"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="inputs row mb-3">
+                                        <div class="col-md-3"><label asp-for="Enquiry" asp-postfix=":"></label></div>
+                                        <div class="col-md-9">
+                                            <textarea asp-for="Enquiry" placeholder="@T("ContactUs.Enquiry.Hint")" class="enquiry form-control with-required"></textarea>
+                                            <nop-required />
+                                            <span asp-validation-for="Enquiry"></span>
+                                        </div>
+                                    </div>
+                                    @if (Model.DisplayCaptcha)
+                                    {
+                                        <div class="captcha-box">
+                                            <nop-captcha />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="buttons text-center mb-4">
+                                <input type="submit" name="send-email" class="btn btn-primary btn-main contact-us-button" value="@T("ContactUs.Button")" />
+                            </div>
+                        </form>
+                    }
+                </div>
+                <div class="col-md-7">
+                        @Html.Raw(Model.CurrentStore.MapEmbedCode)
+                </div>
             </div>
-        }
-        else
-        {
-            <form asp-route="ContactUs" method="post">
-                <div asp-validation-summary="ModelOnly" class="message-error"></div>
-                <div class="fieldset">
-                    <div class="form-fields">
-                        <div class="inputs">
-                            <label asp-for="FullName" asp-postfix=":"></label>
-                            <input asp-for="FullName" placeholder="@T("ContactUs.FullName.Hint")" class="fullname" />
-                            <nop-required />
-                            <span asp-validation-for="FullName"></span>
-                        </div>
-                        <div class="inputs">
-                            <label asp-for="Email" asp-postfix=":"></label>
-                            <input asp-for="Email" placeholder="@T("ContactUs.Email.Hint")" class="email" />
-                            <nop-required />
-                            <span asp-validation-for="Email"></span>
-                        </div>
-                        @if (Model.SubjectEnabled)
-                        {
-                            <div class="inputs">
-                                <label asp-for="Subject" asp-postfix=":"></label>
-                                <input asp-for="Subject" placeholder="@T("ContactUs.Subject.Hint")" class="subject" />
-                                <nop-required />
-                                <span asp-validation-for="Subject"></span>
-                            </div>
-                        }
-                        <div class="inputs">
-                            <label asp-for="Enquiry" asp-postfix=":"></label>
-                            <textarea asp-for="Enquiry" placeholder="@T("ContactUs.Enquiry.Hint")" class="enquiry"></textarea>
-                            <nop-required />
-                            <span asp-validation-for="Enquiry"></span>
-                        </div>
-                        @if (Model.DisplayCaptcha)
-                        {
-                            <div class="captcha-box">
-                                <nop-captcha />
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div class="buttons">
-                    <input type="submit" name="send-email" class="button-1 contact-us-button" value="@T("ContactUs.Button")" />
-                </div>
-            </form>
-        }
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContactUsBottom })
+
+        </div>
     </div>
+
 </div>

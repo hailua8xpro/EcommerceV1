@@ -54,66 +54,31 @@
                                 {
                                     <li class="company">@address.Company</li>
                                 }
-                                @if (address.StreetAddressEnabled)
-                                {
-                                    <li class="address1">
-                                        @address.Address1
-                                    </li>
-                                }
-                                @if (address.StreetAddress2Enabled && !string.IsNullOrEmpty(address.Address2))
-                                {
-                                    <li class="address2">
-                                        @address.Address2
-                                    </li>
-                                }
-                                @if (address.CityEnabled && !string.IsNullOrEmpty(address.City)||
-                             address.CountyEnabled && !string.IsNullOrEmpty(address.County) ||
-                             address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName) ||
-                             address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
-                                {
-                                    var addressLine = string.Empty;
-                                    if (address.CityEnabled && !string.IsNullOrEmpty(address.City))
+                                <li class="cusadd">
+                                    @if (address.StreetAddressEnabled)
                                     {
-                                        addressLine += address.City;
-                                        if (address.CountyEnabled && !string.IsNullOrEmpty(address.County) ||
-                                            address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName) ||
-                                            address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
-                                        {
-                                            addressLine += ", ";
-                                        }
+                                        <span>@address.Address1</span>
                                     }
-                                    if (address.CountyEnabled && !string.IsNullOrEmpty(address.County))
+                                    @if (!string.IsNullOrEmpty(address.WardName))
                                     {
-                                        addressLine += address.County;
-                                        if (address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName) ||
-                                            address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
-                                        {
-                                            addressLine += ", ";
-                                        }
+                                        <span>@address.WardName</span>
                                     }
-                                    if (address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName))
+                                    @if (!string.IsNullOrEmpty(address.DistrictName))
                                     {
-                                        addressLine += address.StateProvinceName;
-                                        if (address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
-                                        {
-                                            addressLine += ", ";
-                                        }
+                                        <span>@address.DistrictName</span>
                                     }
-                                    if (address.ZipPostalCodeEnabled && !string.IsNullOrEmpty(address.ZipPostalCode))
+                                    @if (address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName))
                                     {
-                                        addressLine += address.ZipPostalCode;
-                                    }
+                                        <span>
+                                            @if (address.StateProvinceEnabled && !string.IsNullOrEmpty(address.StateProvinceName))
+                                            {
+                                                @address.StateProvinceName
+                                            }
 
-                                    <li class="city-state-zip">
-                                        @addressLine
-                                    </li>
-                                }
-                                @if (address.CountryEnabled && !string.IsNullOrEmpty(address.CountryName))
-                                {
-                                    <li class="country">
-                                        @address.CountryName
-                                    </li>
-                                }
+                                        </span>
+                                    }
+                                </li>
+                               
                                 @if (!string.IsNullOrEmpty(address.FormattedCustomAddressAttributes))
                                 {
                                     <li class="custom-attributes-view">

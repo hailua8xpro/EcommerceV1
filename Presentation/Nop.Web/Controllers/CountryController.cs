@@ -30,7 +30,18 @@ namespace Nop.Web.Controllers
             var model = _countryModelFactory.GetStatesByCountryId(countryId, addSelectStateItem);
             return Json(model);
         }
+        public virtual IActionResult GetDistrictsByStateId(string stateId)
+        {
+            var model = _countryModelFactory.GetDistrictsByStateId(stateId);
+            return Json(model);
+        }
+        public virtual IActionResult GetWardsByDistrictId(string districtId)
+        {
+            var model = _countryModelFactory.GetWardsByDistrictId(districtId);
+            return Json(model);
+        }
         
+      
         #endregion
     }
 }

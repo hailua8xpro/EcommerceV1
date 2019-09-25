@@ -111,9 +111,19 @@
                 <div class="row my-4">
                     @foreach (var product in Model.Products)
                     {
-                        <div class="col-6 col-md-4">
-                            @await Html.PartialAsync("_ProductBox", product)
-                        </div>
+                        if (Model.PagingFilteringContext.ViewMode != "list")
+                        {
+                            <div class="col-6 col-md-4">
+                                @await Html.PartialAsync("_ProductBox", product)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-12">
+                                @await Html.PartialAsync("_ProductBoxListMode", product)
+                            </div>
+                        }
+
                     }
                 </div>
             </div>

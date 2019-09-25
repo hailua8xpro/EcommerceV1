@@ -74,7 +74,7 @@ namespace Nop.Services.Common
         /// <param name="customAttributes">Custom address attributes (XML format)</param>
         /// <returns>Address</returns>
         Address FindAddress(List<Address> source, string firstName, string lastName, string phoneNumber, string email,
-            string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId,
+            string faxNumber, string company, string address1, string address2, string city, string county, int? stateProvinceId, int? districtId, int? wardId,
             string zipPostalCode, int? countryId, string customAttributes);
     }
 }

@@ -1,34 +1,61 @@
-﻿@model NewsItemListModel
+﻿@using Nop.Core.Domain.Common
+@inject CommonSettings commonSettings
+@model NewsItemListModel
 @{
-    Layout = "_ColumnsTwo";
+    Layout = "_ColumnsTwoNews";
 
     //title
     Html.AddTitleParts(T("PageTitle.NewsArchive").Text);
     //page class
     Html.AppendPageCssClassParts("html-news-list-page");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+}
+@section Breadcrumb{
+    <div class="breadcrumb">
+        <div class="container">
+            <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                <li>
+                    <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <strong class="current-item" itemprop="name">@T("News")</strong>
+                    <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
+                          id="@(Url.RouteUrl("ShoppingCart"))">
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+@section right{
+    @await Component.InvokeAsync("NewsCategoryNavigation", new { currentCategoryId = 0, currentNewsId = 0 })
+
+}
+
+@section categorytitle{
+    <div class="page-title">
+        <h1 class="h3 mb-3">@T("News")</h1>
+    </div>
 }
 <div class="page news-list-page">
-    <div class="page-title">
-        <a href="@Url.RouteUrl("NewsRSS", new { languageId = Model.WorkingLanguageId })" class="link-rss" title="@T("News.RSS.Hint")">@T("News.RSS")</a>
-        <h1>@T("News")</h1>
-    </div>
     <div class="page-body">
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.NewsListPageBeforeItems })
-        <div class="news-items">
+        <div class="news-items row">
             @foreach (var item in Model.NewsItems)
             {
-                <div class="news-item">
-                    <div class="news-head">
-                        <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a>
-                        <span class="news-date">-@item.CreatedOn.ToString("D")</span>
+                <div class="col-md-6">
+                    <div class="news-item">
+                        <div class="news-head">
+                            <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })"><img class="lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Title" /></a>
+                        </div>
+                        <h3 class="title">
+                            <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a>
+                        </h3>
+                        <div class="post-posed-date">
+                            <span class="news-date">@item.CreatedOn.ToString("D")</span>
+                        </div>
                     </div>
-                    <div class="news-body">
-                        @Html.Raw(item.Short)
-                    </div>
-                    <div class="buttons">
-                        <a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })" class="read-more">@T("News.MoreInfo")</a>
-                    </div>
-                    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.NewsListPageInsideItem, additionalData = item })
                 </div>
             }
         </div>
@@ -41,6 +68,5 @@
                 @pager
             </div>
         }
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.NewsListPageAfterItems })
     </div>
 </div>

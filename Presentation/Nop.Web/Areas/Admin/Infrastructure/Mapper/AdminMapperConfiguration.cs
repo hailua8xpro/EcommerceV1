@@ -908,6 +908,9 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateMap<District, DistrictModel>();
             CreateMap<DistrictModel, District>()
                 .ForMember(entity => entity.StateProvince, options => options.Ignore());
+            CreateMap<Ward, WardModel>();
+            CreateMap<WardModel, Ward>()
+                .ForMember(entity => entity.District, options => options.Ignore());
         }
 
         /// <summary>

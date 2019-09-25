@@ -426,8 +426,8 @@ namespace Nop.Services.Plugins
 
                     //activity log
                     var customer = _customerService.GetCustomerByGuid(pluginToInstall.CustomerGuid ?? Guid.Empty);
-                    customerActivityService.InsertActivity(customer, "InstallNewPlugin",
-                        string.Format(localizationService.GetResource("ActivityLog.InstallNewPlugin"), descriptor.SystemName));
+                    //customerActivityService.InsertActivity(customer, "InstallNewPlugin",
+                    //    string.Format(localizationService.GetResource("ActivityLog.InstallNewPlugin"), descriptor.SystemName));
 
                     //mark the plugin as installed
                     descriptor.Installed = true;

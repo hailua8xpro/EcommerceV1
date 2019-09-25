@@ -19,6 +19,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </summary>
         /// <param name="searchModel">Country search model</param>
         /// <returns>Country list model</returns>
+        StateProvinceSearchModel PrepareStateProvinceSearchModel(StateProvinceSearchModel searchModel, Country country);
         CountryListModel PrepareCountryListModel(CountrySearchModel searchModel);
 
         /// <summary>

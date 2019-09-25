@@ -37,6 +37,7 @@ namespace Nop.Web.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly INewsModelFactory _newsModelFactory;
         private readonly INewsService _newsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly IPermissionService _permissionService;
         private readonly IStoreContext _storeContext;
         private readonly IStoreMappingService _storeMappingService;
@@ -57,6 +58,7 @@ namespace Nop.Web.Controllers
             ILocalizationService localizationService,
             INewsModelFactory newsModelFactory,
             INewsService newsService,
+            INewsCategoryService newsCategoryService,
             IPermissionService permissionService,
             IStoreContext storeContext,
             IStoreMappingService storeMappingService,
@@ -82,6 +84,7 @@ namespace Nop.Web.Controllers
             _workflowMessageService = workflowMessageService;
             _localizationSettings = localizationSettings;
             _newsSettings = newsSettings;
+            _newsCategoryService = newsCategoryService;
         }
 
         #endregion
@@ -96,7 +99,31 @@ namespace Nop.Web.Controllers
             var model = _newsModelFactory.PrepareNewsItemListModel(command);
             return View(model);
         }
+        public virtual IActionResult Category(int categoryId,NewsPagingFilteringModel command)
+        {
+            if (!_newsSettings.Enabled)
+                return RedirectToRoute("Homepage");
+            var category = _newsCategoryService.GetNewsCategoryById(categoryId);
+            if (category == null || category.Deleted)
+                return InvokeHttp404();
+            if (_permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel) && _permissionService.Authorize(StandardPermissionProvider.ManageNews))
+                DisplayEditLink(Url.Action("Edit", "NewsCategory", new { id = category.Id, area = AreaNames.Admin }));
+            _customerActivityService.InsertActivity("PublicStore.ViewNewsCategory",
+               string.Format(_localizationService.GetResource("ActivityLog.PublicStore.ViewNewsCategory"), category.Name), category);
 
+            //model
+            var model = _newsModelFactory.PrepareNewsCategoryModel(category, command);
+            return View(model);
+        }
+        [HttpsRequirement(SslRequirement.No)]
+        public virtual IActionResult Search(NewsSearchModel model, NewsPagingFilteringModel command)
+        {
+            if (model == null)
+                model = new NewsSearchModel();
+
+            model = _newsModelFactory.PrepareSearchModel(model, command);
+            return View(model);
+        }
         public virtual IActionResult ListRss(int languageId)
         {
             var feed = new RssFeed(
@@ -142,7 +169,7 @@ namespace Nop.Web.Controllers
                 return InvokeHttp404();
 
             var model = new NewsItemModel();
-            model = _newsModelFactory.PrepareNewsItemModel(model, newsItem, true);
+            model = _newsModelFactory.PrepareNewsItemModel(model, newsItem, true,true);
 
             //display "edit" (manage) link
             if (hasAdminAccess)

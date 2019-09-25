@@ -14,8 +14,8 @@
     "Tax.Avalara",
     "Tax.FixedOrByCountryStateZip",
     "Widgets.GoogleAnalytics",
-    "Widgets.NivoSlider",
-    "ExternalAuth.Facebook"
+    "ExternalAuth.Facebook",
+    "Payments.CashOnDelivery"
   ],
   "PluginNamesToUninstall": [],
   "PluginNamesToDelete": [],

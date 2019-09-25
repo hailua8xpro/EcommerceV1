@@ -27,7 +27,7 @@ namespace Nop.Web.Components
             _workContext = workContext;
         }
 
-        public IViewComponentResult Invoke(bool? prepareAndDisplayOrderReviewData, ShoppingCartModel overriddenModel)
+        public IViewComponentResult Invoke(bool? prepareAndDisplayOrderReviewData, ShoppingCartModel overriddenModel,string viewName)
         {
             //use already prepared (shared) model
             if (overriddenModel != null)
@@ -40,7 +40,7 @@ namespace Nop.Web.Components
             model = _shoppingCartModelFactory.PrepareShoppingCartModel(model, cart,
                 isEditable: false,
                 prepareAndDisplayOrderReviewData: prepareAndDisplayOrderReviewData.GetValueOrDefault());
-            return View(model);
+            return string.IsNullOrEmpty(viewName) ? View(model) : View(viewName,model);
         }
     }
 }

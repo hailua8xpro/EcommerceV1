@@ -37,6 +37,8 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets the state/province identifier
         /// </summary>
         public int? StateProvinceId { get; set; }
+        public int? DistrictId { get; set; }
+        public int? WardId { get; set; }
 
         /// <summary>
         /// Gets or sets the county
@@ -92,6 +94,8 @@ namespace Nop.Core.Domain.Common
         /// Gets or sets the state/province
         /// </summary>
         public virtual StateProvince StateProvince { get; set; }
+        public virtual District District { get; set; }
+        public virtual Ward Ward { get; set; }
 
         /// <summary>
         /// Clone
@@ -109,6 +113,10 @@ namespace Nop.Core.Domain.Common
                 CountryId = CountryId,
                 StateProvince = StateProvince,
                 StateProvinceId = StateProvinceId,
+                DistrictId= DistrictId,
+                District=District,
+                WardId= WardId,
+                Ward=Ward,
                 County = County,
                 City = City,
                 Address1 = Address1,

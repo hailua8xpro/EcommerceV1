@@ -13,8 +13,8 @@
 <div class="content">
     <div class="form-horizontal">
         <nop-panels id="country-panels">
-            <nop-panel asp-name="country-info" asp-icon="fa fa-info" asp-title="@T("Admin.Configuration.Countries.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateDistrict.Info", Model)</nop-panel>
-            <nop-panel asp-name="country-states" asp-icon="fa fa-globe" asp-title="@T("Admin.Configuration.Countries.States")" asp-hide-block-attribute-name="@hideWardBlockAttributeName" asp-hide="@hideWardBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateDistrict.Wards", Model)</nop-panel>
+            <nop-panel asp-name="country-info" asp-icon="fa fa-info" asp-title="@T("Admin.Configuration.Districts.Info")" asp-hide-block-attribute-name="@hideInfoBlockAttributeName" asp-hide="@hideInfoBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateDistrict.Info", Model)</nop-panel>
+            <nop-panel asp-name="country-states" asp-icon="fa fa-globe" asp-title="@T("Admin.Configuration.Wards")" asp-hide-block-attribute-name="@hideWardBlockAttributeName" asp-hide="@hideWardBlock" asp-advanced="false">@await Html.PartialAsync("_CreateOrUpdateDistrict.Wards", Model)</nop-panel>
         </nop-panels>
     </div>
 </div>

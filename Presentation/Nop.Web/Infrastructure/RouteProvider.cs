@@ -103,7 +103,8 @@ namespace Nop.Web.Infrastructure
             //news
             routeBuilder.MapLocalizedRoute("NewsArchive", "news",
 				new { controller = "News", action = "List" });
-
+            routeBuilder.MapLocalizedRoute("NewsSearch", "tim-tin-tuc/",
+                new { controller = "News", action = "Search" });
             //forum
             routeBuilder.MapLocalizedRoute("Boards", "boards",
 				new { controller = "Boards", action = "Index" });
@@ -361,7 +362,10 @@ namespace Nop.Web.Infrastructure
             //get state list by country ID  (AJAX link)
             routeBuilder.MapRoute("GetStatesByCountryId", "country/getstatesbycountryid/",
 				new { controller = "Country", action = "GetStatesByCountryId" });
-
+            routeBuilder.MapRoute("GetDistrictsByStateId", "country/getdistrictsbystateid/",
+                new { controller = "Country", action = "GetDistrictsByStateId" });
+            routeBuilder.MapRoute("GetWardsByDistrictId", "country/getwardsbydistrictid/",
+               new { controller = "Country", action = "GetWardsByDistrictId" });
             //EU Cookie law accept button handler (AJAX link)
             routeBuilder.MapRoute("EuCookieLawAccept", "eucookielawaccept",
 				new { controller = "Common", action = "EuCookieLawAccept" });

@@ -1,0 +1,81 @@
+﻿@using Nop.Core.Domain.Common
+@inject CommonSettings commonSettings
+@model NewsSearchModel
+@{
+    Layout = "_ColumnsTwoNews";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.NewsArchive").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-news-search-page");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+}
+@section Breadcrumb{
+    <div class="breadcrumb">
+        <div class="container">
+            <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                <li>
+                    <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                    <strong class="current-item" itemprop="name">@T("SearchNews")</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+@section right{
+    @await Component.InvokeAsync("NewsCategoryNavigation", new { currentCategoryId = 0, currentNewsId = 0 })
+
+}
+
+@section categorytitle{
+    <div class="page-title">
+        <h1 class="h3 mb-3">@T("SearchNews")</h1>
+    </div>
+}
+
+<div class="page news-list-page">
+    <div class="page-body">
+        <form asp-route="NewsSearch" method="get">
+            <div class="basic-search">
+                <div class="inputs">
+                    <label asp-for="q">@T("Search.SearchTerm"):</label>
+                    <input asp-for="q" class="search-text form-control d-inline-block w-auto" />
+                </div>
+            </div>
+            <div class="buttons">
+                <input type="submit" class="btn btn-primary btn-main search-button" value="@T("Search.Button")" />
+            </div>
+        </form>
+            <div class="news-items row">
+                @foreach (var item in Model.NewsItems)
+                {
+                    <div class="col-md-6">
+                        <div class="news-item">
+                            <div class="news-head">
+                                <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })"><img class="lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Title" /></a>
+                            </div>
+                            <h3 class="title">
+                                <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a>
+                            </h3>
+                            <div class="post-posed-date">
+                                <span class="news-date">@item.CreatedOn.ToString("D")</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @{
+                var pager = Html.Pager(Model.PagingContext).QueryParam("pagenumber");
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="pager">
+                    @pager
+                </div>
+            }
+    </div>
+</div>

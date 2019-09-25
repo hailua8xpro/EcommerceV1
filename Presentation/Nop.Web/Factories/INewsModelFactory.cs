@@ -1,5 +1,6 @@
 ﻿using Nop.Core.Domain.News;
 using Nop.Web.Models.News;
+using System.Collections.Generic;
 
 namespace Nop.Web.Factories
 {
@@ -22,7 +23,7 @@ namespace Nop.Web.Factories
         /// <param name="newsItem">News item</param>
         /// <param name="prepareComments">Whether to prepare news comment models</param>
         /// <returns>News item model</returns>
-        NewsItemModel PrepareNewsItemModel(NewsItemModel model, NewsItem newsItem, bool prepareComments);
+        NewsItemModel PrepareNewsItemModel(NewsItemModel model, NewsItem newsItem, bool prepareComments, bool prepareBreadcrumb=false);
 
         /// <summary>
         /// Prepare the home page news items model
@@ -36,5 +37,10 @@ namespace Nop.Web.Factories
         /// <param name="command">News paging filtering model</param>
         /// <returns>News item list model</returns>
         NewsItemListModel PrepareNewsItemListModel(NewsPagingFilteringModel command);
+        NewsCategoryNavigationModel PrepareNewsCategoryNavigationModel(int currentNewsCategoryId, int currentNewsId);
+        List<NewsCategoryModel> PrepareNewsCategorySimpleModels();
+        List<NewsCategoryModel> PrepareNewsCategorySimpleModels(int rootNewsCategoryId, bool loadNewsSubCategories = true);
+        NewsCategoryModel PrepareNewsCategoryModel(NewsCategory category, NewsPagingFilteringModel command);
+        NewsSearchModel PrepareSearchModel(NewsSearchModel model, NewsPagingFilteringModel command);
     }
 }

@@ -1,4 +1,6 @@
-﻿@model CheckoutPaymentInfoModel
+﻿@using Nop.Core.Domain.Common
+@inject CommonSettings commonSettings
+@model CheckoutPaymentInfoModel
 @{
     Layout = "_ColumnsOne";
 
@@ -7,31 +9,50 @@
     //page class
     Html.AppendPageCssClassParts("html-checkout-page");
     Html.AppendPageCssClassParts("html-payment-info-page");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
 }
+<div class="breadcrumb">
+    <div class="container">
+        <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li>
+                <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                <span class="delimiter">@breadcrumbDelimiter</span>
+            </li>
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                <strong class="current-item" itemprop="name">@T("Checkout.PaymentInfo")</strong>
+                <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
+                      id="@(Url.RouteUrl("ShoppingCart"))">
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>
 <div class="page checkout-page payment-info-page">
-    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Payment })
-    <div class="page-title">
-        <h1>@T("Checkout.PaymentInfo")</h1>
-    </div>
-    <div class="page-body checkout-data">
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutPaymentInfoTop })
-        <div class="section payment-info">
-            <form asp-route="CheckoutPaymentInfo" method="post">
-                <div asp-validation-summary="ModelOnly" class="message-error"></div>
-                <div class="info">
-                    @await Component.InvokeAsync(Model.PaymentViewComponentName)
+    <div class="container">
+        <div class="page-body checkout-data">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="section payment-info border rounded p-3 mb-4">
+                        <form asp-route="CheckoutPaymentInfo" method="post">
+                            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                            <div class="info">
+                                @await Component.InvokeAsync(Model.PaymentViewComponentName)
+                            </div>
+                            <div class="buttons">
+                                <input type="submit" name="nextstep" value="@T("Checkout.NextButton")" class="btn btn-primary btn-main payment-info-next-step-button" />
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="buttons">
-                    <input type="submit" name="nextstep" value="@T("Checkout.NextButton")" class="button-1 payment-info-next-step-button"/>
+                <div class="col-md-5">
+                    <div class="section order-summary">
+                        @await Component.InvokeAsync("OrderSummary", new { viewName = "OrderSummaryCheckout" })
+                    </div>
                 </div>
-            </form>
-        </div>
-        @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.CheckoutPaymentInfoBottom })
-        <div class="section order-summary">
-            <div class="title">
-                <strong>@T("Checkout.OrderSummary")</strong>
             </div>
-            @await Component.InvokeAsync("OrderSummary", "ShoppingCart")
+           
         </div>
     </div>
+   
 </div>

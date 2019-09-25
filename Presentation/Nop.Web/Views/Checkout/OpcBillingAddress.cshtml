@@ -60,7 +60,6 @@
             </div>
         </div>
     }
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressMiddle })
     <div class="section new-billing-address" id="billing-new-address-form">
         <div class="enter-address">
             <div asp-validation-summary="ModelOnly" class="message-error"></div>
@@ -71,5 +70,4 @@
             }
         </div>
     </div>
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.OpCheckoutBillingAddressBottom })
 </div>

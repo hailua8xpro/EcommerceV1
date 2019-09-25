@@ -50,7 +50,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <param name="searchModel">State and province search model</param>
         /// <param name="country">Country</param>
         /// <returns>State and province search model</returns>
-        protected virtual StateProvinceSearchModel PrepareStateProvinceSearchModel(StateProvinceSearchModel searchModel, Country country)
+        public virtual StateProvinceSearchModel PrepareStateProvinceSearchModel(StateProvinceSearchModel searchModel, Country country)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));

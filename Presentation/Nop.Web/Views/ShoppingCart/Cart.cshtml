@@ -26,10 +26,6 @@
         </ul>
     </div>
 </div>
-    @*@if (!Model.OnePageCheckoutEnabled)
-    {
-        @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Cart })
-    }*@
 <div class="page shopping-cart-page">
     <div class="container">
         <div class="page-body mb-3">

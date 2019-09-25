@@ -31,6 +31,7 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ILanguageService _languageService;
         private readonly ILocalizationService _localizationService;
         private readonly INewsService _newsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly IStoreMappingSupportedModelFactory _storeMappingSupportedModelFactory;
         private readonly IStoreService _storeService;
         private readonly IUrlRecordService _urlRecordService;
@@ -45,6 +46,7 @@ namespace Nop.Web.Areas.Admin.Factories
             ILanguageService languageService,
             ILocalizationService localizationService,
             INewsService newsService,
+            INewsCategoryService newsCategoryService,
             IStoreMappingSupportedModelFactory storeMappingSupportedModelFactory,
             IStoreService storeService,
             IUrlRecordService urlRecordService)
@@ -58,6 +60,7 @@ namespace Nop.Web.Areas.Admin.Factories
             _storeMappingSupportedModelFactory = storeMappingSupportedModelFactory;
             _storeService = storeService;
             _urlRecordService = urlRecordService;
+            _newsCategoryService = newsCategoryService;
         }
 
         #endregion
@@ -178,8 +181,17 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.Published = true;
                 model.AllowComments = true;
             }
+            else
+                model.SelectedCategoryIds = _newsCategoryService.GetNewsCategoryMappingsByNewsId(newsItem.Id, true)
+                        .Select(ncm => ncm.NewsCategoryId).ToList();
             ///prepare available languages
             _baseAdminModelFactory.PrepareLanguages(model.AvailableLanguages, false);
+            _baseAdminModelFactory.PrepareNewsCategories(model.AvailableCategories);
+            foreach (var categoryItem in model.AvailableCategories)
+            {
+                categoryItem.Selected = int.TryParse(categoryItem.Value, out var categoryId)
+                    && model.SelectedCategoryIds.Contains(categoryId);
+            }
             _storeMappingSupportedModelFactory.PrepareModelStores(model, newsItem, excludeProperties);
 
             return model;

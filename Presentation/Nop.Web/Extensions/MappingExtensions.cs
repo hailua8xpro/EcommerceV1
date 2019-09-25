@@ -52,6 +52,8 @@ namespace Nop.Web.Extensions
             destination.Company = model.Company;
             destination.CountryId = model.CountryId;
             destination.StateProvinceId = model.StateProvinceId;
+            destination.DistrictId = model.DistrictId;
+            destination.WardId = model.WardId;
             destination.County = model.County;
             destination.City = model.City;
             destination.Address1 = model.Address1;

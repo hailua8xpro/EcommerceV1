@@ -1,0 +1,67 @@
+@model StateProvinceSearchModel
+
+@{
+    //page title
+    ViewBag.Title = T("Admin.Configuration.Sates").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Countries");
+}
+
+<nop-antiforgery-token />
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.Configuration.Sates")
+    </h1>
+    <div class="pull-right">
+        <a asp-action="Create" class="btn bg-blue">
+            <i class="fa fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+    </div>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+                    {
+                        Name = "states-grid",
+                        UrlRead = new DataUrl("States", "Country",  new RouteValueDictionary { [nameof(Model.CountryId)] = Model.CountryId}),
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
+                        ColumnCollection = new List<ColumnProperty>
+                        {
+                            new ColumnProperty(nameof(CountryModel.Name))
+                            {
+                                Title = T("Admin.Configuration.Countries.Fields.Name").Text,
+                                Width = "200"
+                            },
+                            new ColumnProperty(nameof(CountryModel.DisplayOrder))
+                            {
+                                Title = T("Admin.Configuration.Countries.Fields.DisplayOrder").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.CenterAll
+                            },
+                            new ColumnProperty(nameof(CountryModel.Published))
+                            {
+                                Title = T("Admin.Configuration.Countries.Fields.Published").Text,
+                                Width = "100",
+                                ClassName =  NopColumnClassDefaults.CenterAll,
+                                Render = new RenderBoolean()
+                            },
+                            new ColumnProperty(nameof(StateProvinceModel.Id))
+                            {
+                                Title = T("Admin.Common.Edit").Text,
+                                Width = "50",
+                                ClassName =  NopColumnClassDefaults.Button,
+                                Render = new RenderButtonEdit(new DataUrl("StateEdit"))
+                            }
+                        }
+                    })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

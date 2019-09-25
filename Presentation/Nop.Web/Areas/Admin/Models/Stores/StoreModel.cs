@@ -48,7 +48,8 @@ namespace Nop.Web.Areas.Admin.Models.Stores
 
         [NopResourceDisplayName("Admin.Configuration.Stores.Fields.CompanyAddress")]
         public string CompanyAddress { get; set; }
-
+        [NopResourceDisplayName("Admin.Configuration.Stores.Fields.MapEmbedCode")]
+        public string MapEmbedCode { get; set; }
         [NopResourceDisplayName("Admin.Configuration.Stores.Fields.CompanyPhoneNumber")]
         public string CompanyPhoneNumber { get; set; }
 

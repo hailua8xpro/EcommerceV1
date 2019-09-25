@@ -28,5 +28,19 @@ namespace Nop.Web.Models.News
 
         public IList<NewsCommentModel> Comments { get; set; }
         public AddNewsCommentModel AddNewComment { get; set; }
+        public NewsItemBreadcrumbModel Breadcrumb { get; set; }
+        public partial class NewsItemBreadcrumbModel : BaseNopModel
+        {
+            public NewsItemBreadcrumbModel()
+            {
+                NewsCategoryBreadcrumb = new List<NewsCategoryModel>();
+            }
+
+            public bool Enabled { get; set; }
+            public int NewsId { get; set; }
+            public string Title { get; set; }
+            public string SeName { get; set; }
+            public IList<NewsCategoryModel> NewsCategoryBreadcrumb { get; set; }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Caching;
@@ -9,6 +10,7 @@ using Nop.Core.Domain.Security;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Helpers;
+using Nop.Services.Localization;
 using Nop.Services.Media;
 using Nop.Services.News;
 using Nop.Services.Seo;
@@ -31,6 +33,7 @@ namespace Nop.Web.Factories
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly INewsService _newsService;
+        private readonly INewsCategoryService _newsCategoryService;
         private readonly IPictureService _pictureService;
         private readonly IStaticCacheManager _cacheManager;
         private readonly IStoreContext _storeContext;
@@ -38,6 +41,8 @@ namespace Nop.Web.Factories
         private readonly IWorkContext _workContext;
         private readonly MediaSettings _mediaSettings;
         private readonly NewsSettings _newsSettings;
+        private readonly ILocalizationService _localizationService;
+
 
         #endregion
 
@@ -49,13 +54,15 @@ namespace Nop.Web.Factories
             IDateTimeHelper dateTimeHelper,
             IGenericAttributeService genericAttributeService,
             INewsService newsService,
+            INewsCategoryService newsCategoryService,
             IPictureService pictureService,
             IStaticCacheManager cacheManager,
             IStoreContext storeContext,
             IUrlRecordService urlRecordService,
             IWorkContext workContext,
             MediaSettings mediaSettings,
-            NewsSettings newsSettings)
+            NewsSettings newsSettings,
+            ILocalizationService localizationService)
         {
             _captchaSettings = captchaSettings;
             _customerSettings = customerSettings;
@@ -70,6 +77,8 @@ namespace Nop.Web.Factories
             _workContext = workContext;
             _mediaSettings = mediaSettings;
             _newsSettings = newsSettings;
+            _newsCategoryService = newsCategoryService;
+            _localizationService = localizationService;
         }
 
         #endregion
@@ -113,7 +122,7 @@ namespace Nop.Web.Factories
         /// <param name="newsItem">News item</param>
         /// <param name="prepareComments">Whether to prepare news comment models</param>
         /// <returns>News item model</returns>
-        public virtual NewsItemModel PrepareNewsItemModel(NewsItemModel model, NewsItem newsItem, bool prepareComments)
+        public virtual NewsItemModel PrepareNewsItemModel(NewsItemModel model, NewsItem newsItem, bool prepareComments, bool prepareBreadcrumb = false)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -132,6 +141,10 @@ namespace Nop.Web.Factories
             model.AllowComments = newsItem.AllowComments;
             model.CreatedOn = _dateTimeHelper.ConvertToUserTime(newsItem.StartDateUtc ?? newsItem.CreatedOnUtc, DateTimeKind.Utc);
             model.AddNewComment.DisplayCaptcha = _captchaSettings.Enabled && _captchaSettings.ShowOnNewsCommentPage;
+            if (prepareBreadcrumb)
+            {
+                model.Breadcrumb = PrepareNewsItemBreadcrumbModel(newsItem);
+            }
             var picture = _pictureService.GetPictureById(newsItem.PictureId);
             var pictureModel = new PictureModel
             {
@@ -225,7 +238,225 @@ namespace Nop.Web.Factories
 
             return model;
         }
+        public virtual NewsCategoryNavigationModel PrepareNewsCategoryNavigationModel(int currentNewsCategoryId, int currentNewsId)
+        {
+            //get active category
+            var activeNewsCategoryId = 0;
+            if (currentNewsCategoryId > 0)
+            {
+                //category details page
+                activeNewsCategoryId = currentNewsCategoryId;
+            }
+            else if (currentNewsCategoryId > 0)
+            {
+                //product details page
+                var newsCategoryMappings = _newsCategoryService.GetNewsCategoryMappingsByNewsId(currentNewsId);
+                if (newsCategoryMappings.Any())
+                    activeNewsCategoryId = newsCategoryMappings[0].NewsCategoryId;
+            }
 
+            var cachedCategoriesModel = PrepareNewsCategorySimpleModels();
+            var model = new NewsCategoryNavigationModel
+            {
+                CurrentNewsCategoryId = activeNewsCategoryId,
+                NewsCategories = cachedCategoriesModel
+            };
+
+            return model;
+        }
+
+        public virtual List<NewsCategoryModel> PrepareNewsCategorySimpleModels()
+        {
+            //load and cache them
+            var cacheKey = string.Format(NopModelCacheDefaults.NewsCategoryAllModelKey,
+                _workContext.WorkingLanguage.Id,
+                string.Join(",", _workContext.CurrentCustomer.GetCustomerRoleIds()),
+                _storeContext.CurrentStore.Id);
+            return _cacheManager.Get(cacheKey, () => PrepareNewsCategorySimpleModels(0));
+        }
+
+        /// <summary>
+        /// Prepare category (simple) models
+        /// </summary>
+        /// <param name="rootCategoryId">Root category identifier</param>
+        /// <param name="loadSubCategories">A value indicating whether subcategories should be loaded</param>
+        /// <returns>List of category (simple) models</returns>
+        public virtual List<NewsCategoryModel> PrepareNewsCategorySimpleModels(int rootNewsCategoryId, bool loadNewsSubCategories = true)
+        {
+            var result = new List<NewsCategoryModel>();
+
+            //little hack for performance optimization
+            //we know that this method is used to load top and left menu for categories.
+            //it'll load all categories anyway.
+            //so there's no need to invoke "GetAllCategoriesByParentCategoryId" multiple times (extra SQL commands) to load childs
+            //so we load all categories at once (we know they are cached)
+            var allCategories = _newsCategoryService.GetAllNewsCategories(storeId: _storeContext.CurrentStore.Id);
+            var categories = allCategories.Where(c => c.ParentCategoryId == rootNewsCategoryId).ToList();
+            foreach (var category in categories)
+            {
+                var categoryModel = new NewsCategoryModel
+                {
+                    Id = category.Id,
+                    Name = _localizationService.GetLocalized(category, x => x.Name),
+                    SeName = _urlRecordService.GetSeName(category),
+                };
+
+                //number of products in each category
+
+                if (loadNewsSubCategories)
+                {
+                    var subCategories = PrepareNewsCategorySimpleModels(category.Id, loadNewsSubCategories);
+                    categoryModel.SubCategories.AddRange(subCategories);
+                }
+
+                categoryModel.HaveSubCategories = categoryModel.SubCategories.Count > 0;
+
+                result.Add(categoryModel);
+            }
+
+            return result;
+        }
+        public NewsCategoryModel PrepareNewsCategoryModel(NewsCategory category, NewsPagingFilteringModel command)
+        {
+            if (category == null)
+                throw new ArgumentNullException(nameof(category));
+
+            var model = new NewsCategoryModel
+            {
+                Id = category.Id,
+                Name = _localizationService.GetLocalized(category, x => x.Name),
+                Description = _localizationService.GetLocalized(category, x => x.Description),
+                MetaKeywords = _localizationService.GetLocalized(category, x => x.MetaKeywords),
+                MetaDescription = _localizationService.GetLocalized(category, x => x.MetaDescription),
+                MetaTitle = _localizationService.GetLocalized(category, x => x.MetaTitle),
+                SeName = _urlRecordService.GetSeName(category),
+            };
+
+            if (command == null)
+                throw new ArgumentNullException(nameof(command));
+
+            if (command.PageSize <= 0) command.PageSize = _newsSettings.NewsArchivePageSize;
+            if (command.PageNumber <= 0) command.PageNumber = 1;
+
+            var breadcrumbCacheKey = string.Format(NopModelCacheDefaults.CategoryBreadcrumbKey,
+                category.Id,
+                string.Join(",", _workContext.CurrentCustomer.GetCustomerRoleIds()),
+                _storeContext.CurrentStore.Id,
+                _workContext.WorkingLanguage.Id);
+            model.NewsCategoryBreadcrumb = _cacheManager.Get(breadcrumbCacheKey, () =>
+                _newsCategoryService.GetNewsCategoryBreadCrumb(category).Select(catBr => new NewsCategoryModel
+                {
+                    Id = catBr.Id,
+                    Name = _localizationService.GetLocalized(catBr, x => x.Name),
+                    SeName = _urlRecordService.GetSeName(catBr)
+                })
+                .ToList()
+            );
+            var pictureSize = _mediaSettings.CategoryThumbPictureSize;
+
+            //subcategories
+            var subCategoriesCacheKey = string.Format(NopModelCacheDefaults.NewsCategorySubcategoriesKey,
+                category.Id,
+                pictureSize,
+                string.Join(",", _workContext.CurrentCustomer.GetCustomerRoleIds()),
+                _storeContext.CurrentStore.Id,
+                _workContext.WorkingLanguage.Id);
+            model.SubCategories = _cacheManager.Get(subCategoriesCacheKey, () =>
+                _newsCategoryService.GetAllNewsCategoriesByParentCategoryId(category.Id)
+                .Select(x =>
+                {
+                    var subCatModel = new NewsCategoryModel
+                    {
+                        Id = x.Id,
+                        Name = _localizationService.GetLocalized(x, y => y.Name),
+                        SeName = _urlRecordService.GetSeName(x),
+                        Description = _localizationService.GetLocalized(x, y => y.Description)
+                    };
+                    return subCatModel;
+                })
+                .ToList()
+            );
+            var categoryIds = new List<int>();
+            categoryIds.Add(category.Id);
+            categoryIds.AddRange(_newsCategoryService.GetChildNewsCategoryIds(category.Id, _storeContext.CurrentStore.Id));
+            var newslist = _newsService.SearchNews(
+                categoryIds: categoryIds,
+                storeId: _storeContext.CurrentStore.Id,
+                pageIndex: command.PageNumber - 1,
+                pageSize: command.PageSize);
+            model.PagingFilteringContext.LoadPagedList(newslist);
+            model.NewsItems = newslist
+            .Select(x =>
+            {
+                var newsModel = new NewsItemModel();
+                PrepareNewsItemModel(newsModel, x, false);
+                return newsModel;
+            })
+            .ToList();
+            return model;
+        }
+        public NewsSearchModel PrepareSearchModel(NewsSearchModel model, NewsPagingFilteringModel command)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            var searchTerms = model.q;
+            if (searchTerms == null)
+                searchTerms = "";
+            if (command.PageSize <= 0) command.PageSize = _newsSettings.NewsArchivePageSize;
+            if (command.PageNumber <= 0) command.PageNumber = 1;
+            searchTerms = searchTerms.Trim();
+            var newslist = _newsService.SearchNews(keywords: searchTerms, pageIndex: command.PageNumber - 1, pageSize: command.PageSize);
+            model.PagingContext.LoadPagedList(newslist);
+            model.NewsItems = newslist.Select(x =>
+             {
+                 var newsModel = new NewsItemModel();
+                 PrepareNewsItemModel(newsModel, x, false);
+                 return newsModel;
+
+             }).ToList();
+            return model;
+        }
+        protected virtual NewsItemModel.NewsItemBreadcrumbModel PrepareNewsItemBreadcrumbModel(NewsItem newsItem)
+        {
+            if (newsItem == null)
+                throw new ArgumentNullException(nameof(newsItem));
+
+            var cacheKey = string.Format(NopModelCacheDefaults.NewsItemBreadcrumbModelKey,
+                    newsItem.Id,
+                    _workContext.WorkingLanguage.Id,
+                    string.Join(",", _workContext.CurrentCustomer.GetCustomerRoleIds()),
+                    _storeContext.CurrentStore.Id);
+            var cachedModel = _cacheManager.Get(cacheKey, () =>
+            {
+                var breadcrumbModel = new NewsItemModel.NewsItemBreadcrumbModel
+                {
+                    NewsId = newsItem.Id,
+                    Title = newsItem.Title,
+                    SeName = _urlRecordService.GetSeName(newsItem)
+                };
+                var newsCategories = _newsCategoryService.GetNewsCategoryMappingsByNewsId(newsItem.Id);
+                if (!newsCategories.Any())
+                    return breadcrumbModel;
+
+                var category = newsCategories[0].NewsCategory;
+                if (category == null)
+                    return breadcrumbModel;
+
+                foreach (var catBr in _newsCategoryService.GetNewsCategoryBreadCrumb(category))
+                {
+                    breadcrumbModel.NewsCategoryBreadcrumb.Add(new NewsCategoryModel
+                    {
+                        Id = catBr.Id,
+                        Name = _localizationService.GetLocalized(catBr, x => x.Name),
+                        SeName = _urlRecordService.GetSeName(catBr)
+                    });
+                }
+
+                return breadcrumbModel;
+            });
+            return cachedModel;
+        }
         #endregion
     }
 }

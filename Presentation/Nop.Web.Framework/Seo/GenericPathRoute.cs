@@ -175,6 +175,12 @@ namespace Nop.Web.Framework.Seo
                     currentRouteData.Values[NopPathRouteDefaults.VendorIdFieldKey] = urlRecord.EntityId;
                     currentRouteData.Values[NopPathRouteDefaults.SeNameFieldKey] = urlRecord.Slug;
                     break;
+                case "newscategory":
+                    currentRouteData.Values[NopPathRouteDefaults.ControllerFieldKey] = "News";
+                    currentRouteData.Values[NopPathRouteDefaults.ActionFieldKey] = "Category";
+                    currentRouteData.Values[NopPathRouteDefaults.CategoryIdFieldKey] = urlRecord.EntityId;
+                    currentRouteData.Values[NopPathRouteDefaults.SeNameFieldKey] = urlRecord.Slug;
+                    break;
                 case "newsitem":
                     currentRouteData.Values[NopPathRouteDefaults.ControllerFieldKey] = "News";
                     currentRouteData.Values[NopPathRouteDefaults.ActionFieldKey] = "NewsItem";

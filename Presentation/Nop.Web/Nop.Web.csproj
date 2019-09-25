@@ -50,10 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Plugins\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Include="Plugins\Payments.CashOnDelivery\Views\Configure.cshtml" />
+    <None Include="Plugins\Payments.CashOnDelivery\Views\PaymentInfo.cshtml" />
+    <None Include="Plugins\Payments.CashOnDelivery\Views\_ViewImports.cshtml" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.css.map" />

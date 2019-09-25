@@ -3,14 +3,9 @@
   "FriendlyName": "Facebook authentication",
   "SystemName": "ExternalAuth.Facebook",
   "Version": "1.58",
-  "SupportedVersions": [
-    "4.20"
-  ],
+  "SupportedVersions": [ "4.20" ],
   "Author": "nopCommerce team",
   "DisplayOrder": 5,
   "FileName": "Nop.Plugin.ExternalAuth.Facebook.dll",
-  "Description": "This plugin enables Facebook authentication (login using Facebook account)",
-  "LimitedToStores": [],
-  "LimitedToCustomerRoles": [],
-  "DependsOnSystemNames": null
+  "Description": "This plugin enables Facebook authentication (login using Facebook account)"
 }

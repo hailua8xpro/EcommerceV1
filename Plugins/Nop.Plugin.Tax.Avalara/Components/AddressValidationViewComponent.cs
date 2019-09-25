@@ -173,7 +173,7 @@ namespace Nop.Plugin.Tax.Avalara.Components
                 validatedAddress.FirstName, validatedAddress.LastName, validatedAddress.PhoneNumber,
                 validatedAddress.Email, validatedAddress.FaxNumber, validatedAddress.Company,
                 validatedAddress.Address1, validatedAddress.Address2, validatedAddress.City,
-                validatedAddress.County, validatedAddress.StateProvinceId, validatedAddress.ZipPostalCode,
+                validatedAddress.County, validatedAddress.StateProvinceId, validatedAddress.DistrictId, validatedAddress.WardId, validatedAddress.ZipPostalCode,
                 validatedAddress.CountryId, validatedAddress.CustomAttributes);
 
             //if the found address is the same as address to validate, nothing to display

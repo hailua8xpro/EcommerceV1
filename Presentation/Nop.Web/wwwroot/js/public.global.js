@@ -72,13 +72,15 @@ $(document).on('click', 'ul.nav-collapse li .mbi-ios-arrow-up', function () {
     $(this).closest('li').find('ul').slideToggle();
     return false;
 })
-function showQuickViewProduct(url) {
+function showQuickViewProduct(url, e) {
+    $(e).addClass('disabled');
     $.ajax({
         type: 'get',
         url: url,
         beforeSend: function () {
         },
         success: function (e) {
+            $('.product-btn a.disabled').removeClass('disabled');
             if (e.success === true) {
                 var container = $("#quickviewpopup");
                 container.html(e.html);
