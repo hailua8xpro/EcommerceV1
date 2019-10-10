@@ -43,7 +43,7 @@
                         addToCartText = T("ShoppingCart.PreOrder").Text;
                     }
                     <div class="col">
-                        <a href="javascript:" title="@addToCartText" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink',this);return false;">
+                        <a href="javascript:" title="@addToCartText" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink',this);return false;" data-toggle="tooltip" data-placement="top">
                             <span class="mbi mbi-bag2"></span>
                         </a>
                     </div>
@@ -57,7 +57,7 @@
                 @if (!Model.ProductPrice.DisableWishlistButton)
                 {
                     <div class="col">
-                        <a title="@T("ShoppingCart.AddToWishlist")" href="javascript:" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">
+                        <a title="@T("ShoppingCart.AddToWishlist")" href="javascript:" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;" data-toggle="tooltip" data-placement="top">
                             <span class="mbi mbi-heart"></span>
                         </a>
                     </div>
@@ -66,7 +66,7 @@
                 @if (!Model.ProductPrice.DisableAddToCompareListButton)
                 {
                     <div class="col">
-                        <a title="@T("ShoppingCart.AddToCompareList")" href="javascript:" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">
+                        <a title="@T("ShoppingCart.AddToCompareList")" href="javascript:" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;" data-toggle="tooltip" data-placement="top">
                             <span class="mbi mbi-chart-bars"></span>
                         </a>
                     </div>

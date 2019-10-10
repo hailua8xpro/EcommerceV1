@@ -69,8 +69,6 @@
                 {
                     <nop-panel asp-name="order-notes" asp-icon="fa fa-sticky-note-o" asp-title="@T("Admin.Orders.OrderNotes")" asp-hide-block-attribute-name="@hideNotesBlockAttributeName" asp-hide="@hideNotesBlock" asp-advanced="true">@await Html.PartialAsync("_OrderDetails.Notes", Model)</nop-panel>
                 }
-                
-                @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.OrderDetailsBlock, additionalData = Model })
             </nop-panels>
         </div>
     </div>

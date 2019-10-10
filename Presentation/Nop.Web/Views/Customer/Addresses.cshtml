@@ -12,7 +12,7 @@
 {
     @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Addresses })
 }
-<div class="page account-page address-list-page">
+<div class="page account-page address-list-page mb-3">
     <div class="page-title">
         <h1>@T("Account.MyAccount") - @T("Account.CustomerAddresses")</h1>
     </div>
@@ -26,12 +26,9 @@
                         var address = Model.Addresses[i];
                         <div class="section address-item">
                             <div class="title">
-                                <strong>@address.FirstName @address.LastName</strong>
+                                <strong>@address.LastName</strong>
                             </div>
                             <ul class="info">
-                                <li class="name">
-                                    @address.FirstName @address.LastName
-                                </li>
                                 <li class="email">
                                     <label>@T("Address.Fields.Email"):</label>
                                     @address.Email
@@ -55,6 +52,7 @@
                                     <li class="company">@address.Company</li>
                                 }
                                 <li class="cusadd">
+                                    @T("address"):
                                     @if (address.StreetAddressEnabled)
                                     {
                                         <span>@address.Address1</span>
@@ -86,9 +84,9 @@
                                     </li>
                                 }
                             </ul>
-                            <div class="buttons">
-                                <input type="button" class="button-2 edit-address-button" onclick="location.href = '@(Url.RouteUrl("CustomerAddressEdit", new {addressId = address.Id}))'" value="@T("Common.Edit")"/>
-                                <input type="button" class="button-2 delete-address-button" onclick="deletecustomeraddress(@(address.Id))" value="@T("Common.Delete")"/>
+                            <div class="buttons mt-2">
+                                <input type="button" class="btn btn-outline-info edit-address-button" onclick="location.href = '@(Url.RouteUrl("CustomerAddressEdit", new {addressId = address.Id}))'" value="@T("Common.Edit")"/>
+                                <input type="button" class="btn btn-outline-danger delete-address-button" onclick="deletecustomeraddress(@(address.Id))" value="@T("Common.Delete")"/>
                             </div>
                         </div>
                     }
@@ -124,8 +122,8 @@
                 @T("Account.CustomerAddresses.NoAddresses")
             </div>
         }
-        <div class="add-button">
-            <input type="button" class="button-1 add-address-button" onclick="location.href='@Url.RouteUrl("CustomerAddressAdd")'" value="@T("Common.AddNew")" />
+        <div class="add-button mt-2">
+            <input type="button" class="btn btn-primary btn-main add-address-button" onclick="location.href='@Url.RouteUrl("CustomerAddressAdd")'" value="@T("Common.AddNew")" />
         </div>
     </div>
 </div>

@@ -29,7 +29,7 @@
         </ul>
     </div>
 </div>
-<div class="page checkout-page billing-address-page py-3">
+<div class="page checkout-page billing-address-page pb-3">
     <div class="container">
         <div class="page-body checkout-data">
             <div class="row">
@@ -137,7 +137,7 @@
                                         @{
                                             var dataDictAddress = new ViewDataDictionary(ViewData);
                                             dataDictAddress.TemplateInfo.HtmlFieldPrefix = "BillingNewAddress";
-                                            @await Html.PartialAsync("_CreateOrUpdateAddress", Model.BillingNewAddress, dataDictAddress)
+                                            @await Html.PartialAsync("_CreateOrUpdateAddressCheckout", Model.BillingNewAddress, dataDictAddress)
                                         }
                                     </div>
                                 </div>
@@ -150,9 +150,13 @@
 
                 </div>
                 <div class="col-md-5">
-                    <div class="section order-summary">
-                        @await Component.InvokeAsync("OrderSummary", new { viewName = "OrderSummaryCheckout" })
-                    </div>
+                    @if (Model.ExistingAddresses.Count > 0)
+                    {
+                        <p class="text-white">Hi</p>
+                    }
+                        <div class="section order-summary">
+                            @await Component.InvokeAsync("OrderSummary", new { viewName = "OrderSummaryCheckout" })
+                        </div>
                 </div>
             </div>
 

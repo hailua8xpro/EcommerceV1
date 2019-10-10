@@ -134,7 +134,7 @@
             <div class="order-list">
                 @foreach (var order in Model.Orders)
                 {
-                    <div class="section order-item">
+                    <div class="section order-item pb-2 border-bottom mb-2">
                         <div class="title">
                             <strong>@T("Account.CustomerOrders.OrderNumber"): @order.CustomOrderNumber</strong>
                         </div>
@@ -146,9 +146,9 @@
                         <div class="buttons">
                             @if (order.IsReturnRequestAllowed)
                             {
-                                <input type="button" value="@T("Account.CustomerOrders.ReturnItems")" class="button-2 return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })')" />
+                                <input type="button" value="@T("Account.CustomerOrders.ReturnItems")" class="btn btn-primary btn-main return-items-button" onclick="setLocation('@Url.RouteUrl("ReturnRequest", new { orderId = order.Id })')" />
                             }
-                            <input type="button" value="@T("Account.CustomerOrders.OrderDetails")" class="button-2 order-details-button" onclick="setLocation('@Url.RouteUrl("OrderDetails", new { orderId = order.Id })')" />
+                            <input type="button" value="@T("Account.CustomerOrders.OrderDetails")" class="btn btn-primary btn-main order-details-button" onclick="setLocation('@Url.RouteUrl("OrderDetails", new { orderId = order.Id })')" />
                         </div>
                     </div>
                 }

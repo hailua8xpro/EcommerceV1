@@ -1,4 +1,8 @@
-﻿$(document).ready(function() {
+﻿$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+$(document).ready(function () {
+ 
     $('.lazy').Lazy();
     $('.btn-nav').click(function () {
         $(this).addClass('active');

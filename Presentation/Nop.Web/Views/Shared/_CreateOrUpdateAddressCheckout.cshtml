@@ -1,0 +1,101 @@
+﻿@model AddressModel
+
+<input asp-for="Id" type="hidden" />
+<input asp-for="CountryId" type="hidden" />
+<div class="edit-address">
+    <div class="inputs row my-2">
+        <div class="col-md-3"><label asp-for="LastName" asp-postfix=":"></label></div>
+        <div class="col-md-9">
+            <input class="form-control with-required" asp-for="LastName" />
+            <nop-required />
+            <span asp-validation-for="LastName"></span>
+        </div>
+    </div>
+    @if (Model.PhoneEnabled)
+    {
+        <div class="inputs row my-2">
+            <div class="col-md-3"><label asp-for="PhoneNumber" asp-postfix=":"></label></div>
+            <div class="col-md-9">
+                <input asp-for="PhoneNumber" class="form-control with-required" />
+                @if (Model.PhoneRequired)
+                {
+                    <nop-required />
+                }
+                <span asp-validation-for="PhoneNumber"></span>
+            </div>
+        </div>
+    }
+    <div class="inputs row my-2">
+        <div class="col-md-3"><label asp-for="Email" asp-postfix=":"></label></div>
+        <div class="col-md-9">
+            <input asp-for="Email" class="form-control with-required" />
+            <span asp-validation-for="Email"></span>
+        </div>
+    </div>
+    @if (Model.CompanyEnabled)
+    {
+        <div class="inputs row my-2">
+            <label asp-for="Company" asp-postfix=":"></label>
+            <input asp-for="Company" />
+            @if (Model.CompanyRequired)
+            {
+                <nop-required />
+            }
+            <span asp-validation-for="Company"></span>
+        </div>
+    }
+    @if (Model.CountryEnabled && Model.StateProvinceEnabled)
+    {
+        <div class="inputs row my-2">
+            <div class="col-md-3"><label asp-for="StateProvinceId" asp-postfix=":"></label></div>
+            <div class="col-md-9">
+                <select asp-for="StateProvinceId" asp-items="Model.AvailableStates" class="form-control with-required"
+                        data-trigger="state-select"
+                        data-url="@(Url.RouteUrl("GetDistrictsByStateId"))"
+                        data-district="#@Html.IdFor(model => model.DistrictId)"
+                        data-loading="#districts-loading-progress"></select>
+                <span id="states-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+                <span asp-validation-for="StateProvinceId"></span>
+            </div>
+        </div>
+    }
+    <div class="inputs row my-2">
+        <div class="col-md-3"><label asp-for="DistrictId" asp-postfix=":"></label></div>
+        <div class="col-md-9">
+            <select asp-for="DistrictId" asp-items="Model.AvailableDistricts" class="form-control with-required"
+                    data-trigger="district-select"
+                    data-url="@(Url.RouteUrl("GetWardsByDistrictId"))"
+                    data-ward="#@Html.IdFor(model => model.WardId)"
+                    data-loading="#districts-loading-progress"></select>
+            <span id="districts-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+            <span asp-validation-for="DistrictId"></span>
+        </div>
+    </div>
+    <div class="inputs row my-2">
+        <div class="col-md-3"><label asp-for="WardId" asp-postfix=":"></label></div>
+        <div class="col-md-9">
+            <select asp-for="WardId" asp-items="Model.AvailableWards" class="form-control with-required"></select>
+            <span id="states-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+            <span asp-validation-for="WardId"></span>
+        </div>
+    </div>
+    @if (Model.StreetAddressEnabled)
+    {
+        <div class="inputs row my-2">
+            <div class="col-md-3"><label asp-for="Address1" asp-postfix=":"></label></div>
+            <div class="col-md-9">
+                <input asp-for="Address1" class="form-control with-required" />
+                @if (Model.StreetAddressRequired)
+                {
+                    <nop-required />
+                }
+                <span asp-validation-for="Address1"></span>
+            </div>
+        </div>
+    }
+
+    @if (Model.CustomAddressAttributes.Count > 0)
+    {
+        @await Html.PartialAsync("_AddressAttributes", Model.CustomAddressAttributes)
+    }
+</div>

@@ -78,6 +78,8 @@ namespace Nop.Web.Areas.Admin.Models.Orders
 
         [NopResourceDisplayName("Admin.Orders.List.BillingCountry")]
         public int BillingCountryId { get; set; }
+        [NopResourceDisplayName("Admin.Orders.List.BillingProvince")]
+        public int BillingProvinceId { get; set; }
 
         [NopResourceDisplayName("Admin.Orders.List.OrderNotes")]
         public string OrderNotes { get; set; }

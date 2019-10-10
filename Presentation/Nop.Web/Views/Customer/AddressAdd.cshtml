@@ -24,8 +24,8 @@
                 dataDictAddress.TemplateInfo.HtmlFieldPrefix = "Address";
                 @await Html.PartialAsync("_CreateOrUpdateAddress", Model.Address, dataDictAddress)
             }
-            <div class="buttons">
-                <input type="submit" class="button-1 save-address-button" value="@T("Common.Save")" />
+            <div class="buttons my-2">
+                <input type="submit" class="btn btn-primary btn-main save-address-button" value="@T("Common.Save")" />
             </div>
         </div>
     </div>

@@ -9,10 +9,10 @@
 <form asp-controller="Banner" asp-action="Create" method="post">
     <div class="content-header clearfix">
         <h1 class="pull-left">
-            @T("Admin.ContentManagement.Banner.AddNew") 
+            @T("Admin.ContentManagement.Banners.AddNew") 
             <small>
                 <i class="fa fa-arrow-circle-left"></i>
-                <a asp-action="List">@T("Admin.ContentManagement.Banner.BackToList")</a>
+                <a asp-action="List">@T("Admin.ContentManagement.Banners.BackToList")</a>
             </small>
         </h1>
         <div class="pull-right">
@@ -24,7 +24,6 @@
                 <i class="fa fa-floppy-o"></i>
                 @T("Admin.Common.SaveContinue")
             </button>
-            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.CampaignDetailsButtons })
         </div>
     </div>
     @await Html.PartialAsync("_CreateOrUpdate", Model)

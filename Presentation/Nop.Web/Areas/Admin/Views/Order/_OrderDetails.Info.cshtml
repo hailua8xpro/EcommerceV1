@@ -222,7 +222,8 @@
                             {
                                 <div class="col-md-10">
                                     <div class="form-text-row">
-                                        @Model.OrderSubTotalDiscountExclTax <strong>@T("Admin.Orders.Fields.OrderSubTotalDiscountExclTax")</strong>
+                                        @Model.OrderSubTotalDiscountExclTax <strong>@T("" +
+                                                                                   "Admin.Orders.Fields.OrderSubTotalDiscountExclTax")</strong>
                                     </div>
                                 </div>
                             }
@@ -253,7 +254,7 @@
                         {
                             <div class="col-md-2">
                                 <div class="form-text-row">
-                                    @Model.OrderShippingExclTax <strong>@T("Admin.Orders.Fields.OrderShippingExclTax")</strong>
+                                    @Model.OrderShippingExclTax
                                 </div>
                             </div>
                         }

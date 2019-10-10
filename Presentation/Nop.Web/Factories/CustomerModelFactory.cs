@@ -665,40 +665,40 @@ namespace Nop.Web.Factories
                 ItemClass = "customer-orders"
             });
 
-            if (_orderSettings.ReturnRequestsEnabled &&
-                _returnRequestService.SearchReturnRequests(_storeContext.CurrentStore.Id,
-                    _workContext.CurrentCustomer.Id, pageIndex: 0, pageSize: 1).Any())
-            {
-                model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
-                {
-                    RouteName = "CustomerReturnRequests",
-                    Title = _localizationService.GetResource("Account.CustomerReturnRequests"),
-                    Tab = CustomerNavigationEnum.ReturnRequests,
-                    ItemClass = "return-requests"
-                });
-            }
+            //if (_orderSettings.ReturnRequestsEnabled &&
+            //    _returnRequestService.SearchReturnRequests(_storeContext.CurrentStore.Id,
+            //        _workContext.CurrentCustomer.Id, pageIndex: 0, pageSize: 1).Any())
+            //{
+            //    model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
+            //    {
+            //        RouteName = "CustomerReturnRequests",
+            //        Title = _localizationService.GetResource("Account.CustomerReturnRequests"),
+            //        Tab = CustomerNavigationEnum.ReturnRequests,
+            //        ItemClass = "return-requests"
+            //    });
+            //}
 
-            if (!_customerSettings.HideDownloadableProductsTab)
-            {
-                model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
-                {
-                    RouteName = "CustomerDownloadableProducts",
-                    Title = _localizationService.GetResource("Account.DownloadableProducts"),
-                    Tab = CustomerNavigationEnum.DownloadableProducts,
-                    ItemClass = "downloadable-products"
-                });
-            }
+            //if (!_customerSettings.HideDownloadableProductsTab)
+            //{
+            //    model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
+            //    {
+            //        RouteName = "CustomerDownloadableProducts",
+            //        Title = _localizationService.GetResource("Account.DownloadableProducts"),
+            //        Tab = CustomerNavigationEnum.DownloadableProducts,
+            //        ItemClass = "downloadable-products"
+            //    });
+            //}
 
-            if (!_customerSettings.HideBackInStockSubscriptionsTab)
-            {
-                model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
-                {
-                    RouteName = "CustomerBackInStockSubscriptions",
-                    Title = _localizationService.GetResource("Account.BackInStockSubscriptions"),
-                    Tab = CustomerNavigationEnum.BackInStockSubscriptions,
-                    ItemClass = "back-in-stock-subscriptions"
-                });
-            }
+            //if (!_customerSettings.HideBackInStockSubscriptionsTab)
+            //{
+            //    model.CustomerNavigationItems.Add(new CustomerNavigationItemModel
+            //    {
+            //        RouteName = "CustomerBackInStockSubscriptions",
+            //        Title = _localizationService.GetResource("Account.BackInStockSubscriptions"),
+            //        Tab = CustomerNavigationEnum.BackInStockSubscriptions,
+            //        ItemClass = "back-in-stock-subscriptions"
+            //    });
+            //}
 
             if (_rewardPointsSettings.Enabled)
             {

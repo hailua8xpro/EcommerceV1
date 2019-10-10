@@ -35,12 +35,10 @@
     Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/bootstrap-4.3.1/js/bootstrap.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/bootstrap-4.3.1/js/popper.min.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery/jquery-3.3.1.min.js");
-    //X-UA-Compatible tag
     if (commonSettings.RenderXuaCompatible)
     {
         Html.AppendHeadCustomParts($"<meta http-equiv=\"X-UA-Compatible\" content=\"{commonSettings.XuaCompatibleValue}\"/>");
     }
-    //custom tag(s);
     if (!string.IsNullOrEmpty(seoSettings.CustomHeadTags))
     {
         Html.AppendHeadCustomParts(seoSettings.CustomHeadTags);
@@ -60,20 +58,16 @@
     <meta name="generator" content="nopCommerce" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     @Html.NopHeadCustom()
-    @*This is used so that themes can inject content into the header*@
     @await Html.PartialAsync("Head")
-    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.HeadHtmlTag })
     @Html.NopCssFiles(ResourceLocation.Head)
     @Html.NopScripts(ResourceLocation.Head)
     @Html.NopCanonicalUrls()
-    @*Insert favicon and app icons head code*@
     @await Component.InvokeAsync("Favicon")
     @if (displayMiniProfiler)
     {
         <mini-profiler />
     }
     @Html.NopInlineScripts(ResourceLocation.Head)
-    <!--Powered by nopCommerce - https://www.nopCommerce.com-->
 </head>
 <body>
     @RenderBody()

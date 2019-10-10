@@ -118,3 +118,7 @@ function deleteCartItem(id) {
     $('#removefromcart' + id).prop('checked', true);
     $('input[name=updatecart]').click();
 }
+function addToCartWishList(id) {
+    $('#addToCartWishList' + id).prop('checked', true);
+    $('input[name=addtocartbutton]').click();
+}

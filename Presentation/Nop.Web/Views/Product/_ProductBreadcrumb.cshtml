@@ -9,7 +9,6 @@
     <div class="breadcrumb">
         <div class="container">
             <ul itemscope itemtype="http://schema.org/BreadcrumbList">
-                @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ProductBreadcrumbBefore, additionalData = Model })
                 <li>
                     <span>
                         <a href="@Url.RouteUrl("Homepage")">

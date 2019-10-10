@@ -21,7 +21,7 @@ namespace Nop.Web.Areas.Admin.Models.News
 
         #region Properties
 
-        [NopResourceDisplayName("Admin.Catalog.Categories.List.SearchCategoryName")]
+        [NopResourceDisplayName("Admin.Catalog.Categories.List.SearchNewsCategoryName")]
         public string SearchNewsCategoryName { get; set; }
 
         [NopResourceDisplayName("Admin.Catalog.Categories.List.SearchStore")]

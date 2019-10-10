@@ -185,6 +185,8 @@ namespace Nop.Web.Factories
                 model.CountryId = address.CountryId;
                 model.CountryName = address.Country != null ? _localizationService.GetLocalized(address.Country, x => x.Name) : null;
                 model.StateProvinceId = address.StateProvinceId;
+                model.DistrictId = address.DistrictId;
+                model.WardId = address.WardId;
                 model.StateProvinceName = address.StateProvince != null ? _localizationService.GetLocalized(address.StateProvince, x => x.Name) : null;
                 model.County = address.County;
                 model.WardName = address.Ward != null ? address.Ward.Name : null;
@@ -204,12 +206,7 @@ namespace Nop.Web.Factories
                 model.Email = customer.Email;
                 model.FirstName = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.FirstNameAttribute);
                 model.LastName = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.LastNameAttribute);
-                model.Company = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CompanyAttribute);
                 model.Address1 = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
-                model.Address2 = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
-                model.ZipPostalCode = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
-                model.City = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CityAttribute);
-                model.County = _genericAttributeService.GetAttribute<string>(customer, NopCustomerDefaults.CountyAttribute);
                 //ignore country and state for prepopulation. it can cause some issues when posting pack with errors, etc
                 //model.CountryId = _genericAttributeService.GetAttribute<int>(SystemCustomerAttributeNames.CountryId);
                 //model.StateProvinceId = _genericAttributeService.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId);
@@ -278,22 +275,13 @@ namespace Nop.Web.Factories
 
                         foreach (var d in districts)
                         {
-                            model.AvailableStates.Add(new SelectListItem
+                            model.AvailableDistricts.Add(new SelectListItem
                             {
                                 Text = d.Name,
                                 Value = d.Id.ToString(),
                                 Selected = (d.Id == model.DistrictId)
                             });
                         }
-                    }
-                    else
-                    {
-                        var anyStateSelected = model.AvailableStates.Any(x => x.Selected);
-                        model.AvailableDistricts.Add(new SelectListItem
-                        {
-                            Text = _localizationService.GetResource(anyStateSelected ? "Address.OtherNonUS" : "Address.SelectDistrict"),
-                            Value = "0"
-                        });
                     }
                     var wards = _stateProvinceService.GetWardsByDistrictId(model.DistrictId.HasValue ? model.DistrictId.Value : 0);
                     if (wards.Any())
@@ -309,15 +297,6 @@ namespace Nop.Web.Factories
                                 Selected = (d.Id == model.WardId)
                             });
                         }
-                    }
-                    else
-                    {
-                        var anyDistrictSelected = model.AvailableDistricts.Any(x => x.Selected);
-                        model.AvailableWards.Add(new SelectListItem
-                        {
-                            Text = _localizationService.GetResource(anyDistrictSelected ? "Address.OtherNonUS" : "Address.SelectWard"),
-                            Value = "0"
-                        });
                     }
                 }
             }

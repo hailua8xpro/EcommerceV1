@@ -27,10 +27,10 @@
                         <div class="review-title">
                             <strong>@review.Title</strong>@(!string.IsNullOrEmpty(review.ApprovalStatus) ? $" - {review.ApprovalStatus}" : null)
                         </div>
-                        <div class="product-review-box">
+                        <div class="product-rating-box">
                             <div class="rating">
-                                <div style="width: @(ratingPercent)%">
-                                </div>
+                                <span style="width: @(ratingPercent)%">
+                                </span>
                             </div>
                         </div>
                     </div>

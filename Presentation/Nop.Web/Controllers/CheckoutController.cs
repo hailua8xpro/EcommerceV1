@@ -392,6 +392,10 @@ namespace Nop.Web.Controllers
                         address.CountryId = null;
                     if (address.StateProvinceId == 0)
                         address.StateProvinceId = null;
+                    if (address.DistrictId == 0)
+                        address.DistrictId = null;
+                    if (address.WardId == 0)
+                        address.WardId = null;
                     //_workContext.CurrentCustomer.Addresses.Add(address);
                     _workContext.CurrentCustomer.CustomerAddressMappings.Add(new CustomerAddressMapping { Address = address });
                 }
