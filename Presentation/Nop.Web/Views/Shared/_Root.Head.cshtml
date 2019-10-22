@@ -70,6 +70,7 @@
     @Html.NopInlineScripts(ResourceLocation.Head)
 </head>
 <body>
+    @Html.Raw(System.Web.HttpUtility.HtmlDecode(seoSettings.CustomBodyTags))
     @RenderBody()
     @Html.NopCssFiles(ResourceLocation.Footer)
     @Html.NopScripts(ResourceLocation.Footer)

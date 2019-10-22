@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                         }
-                                    </div>
+                    </div>
                 </div>
                 <div class="returning-wrapper col-md-6">
                     <div class="cl bg-gray">
@@ -119,18 +119,22 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-9 offset-md-3">
-                                    <input class="btn btn-primary btn-main login-button" type="submit" value="@T("Account.Login.LoginButton")" />
+                                    <input class="btn btn-primary btn-main login-button btn-block" type="submit" value="@T("Account.Login.LoginButton")" />
                                 </div>
                             </div>
 
                         </form>
-                        @*<div class="external-authentication">
-            @await Component.InvokeAsync("ExternalMethods", "ExternalAuthentication")
-        </div>*@
+                        <div class="external-authentication mt-4">
+                            <div class="row">
+                                <div class="col-md-9 offset-md-3">
+                                    <div class="border-top pt-4">@await Component.InvokeAsync("ExternalMethods", "ExternalAuthentication")</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
 </div>

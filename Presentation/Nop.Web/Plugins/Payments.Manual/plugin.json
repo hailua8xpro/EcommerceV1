@@ -1,16 +1,11 @@
 ﻿{
   "Group": "Payment methods",
-  "FriendlyName": "Thẻ tín dụng",
+  "FriendlyName": "Credit Card",
   "SystemName": "Payments.Manual",
   "Version": "1.49",
-  "SupportedVersions": [
-    "4.20"
-  ],
+  "SupportedVersions": [ "4.20" ],
   "Author": "nopCommerce team",
   "DisplayOrder": 1,
   "FileName": "Nop.Plugin.Payments.Manual.dll",
-  "Description": "This plugin enables credit card payment (stored into database)",
-  "LimitedToStores": [],
-  "LimitedToCustomerRoles": [],
-  "DependsOnSystemNames": null
+  "Description": "This plugin enables credit card payment (stored into database)"
 }

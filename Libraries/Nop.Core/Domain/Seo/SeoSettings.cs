@@ -82,5 +82,6 @@ namespace Nop.Core.Domain.Seo
         /// Custom tags in the <![CDATA[<head></head>]]> section
         /// </summary>
         public string CustomHeadTags { get; set; }
+        public string CustomBodyTags { get; set; }
     }
 }

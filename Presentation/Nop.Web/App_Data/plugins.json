@@ -15,7 +15,8 @@
     "Tax.FixedOrByCountryStateZip",
     "Widgets.GoogleAnalytics",
     "ExternalAuth.Facebook",
-    "Payments.CashOnDelivery"
+    "Payments.CashOnDelivery",
+    "ExternalAuth.Google"
   ],
   "PluginNamesToUninstall": [],
   "PluginNamesToDelete": [],

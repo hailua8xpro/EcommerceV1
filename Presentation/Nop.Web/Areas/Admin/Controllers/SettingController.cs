@@ -1286,6 +1286,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             seoSettings.TwitterMetaTags = model.SeoSettings.TwitterMetaTags;
             seoSettings.OpenGraphMetaTags = model.SeoSettings.OpenGraphMetaTags;
             seoSettings.CustomHeadTags = model.SeoSettings.CustomHeadTags;
+            seoSettings.CustomBodyTags = model.SeoSettings.CustomBodyTags;
 
             //we do not clear cache after each setting update.
             //this behavior can increase performance because cached settings will not be cleared 

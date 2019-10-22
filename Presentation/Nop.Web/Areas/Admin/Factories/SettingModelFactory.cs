@@ -435,6 +435,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
                 TwitterMetaTags = seoSettings.TwitterMetaTags,
                 OpenGraphMetaTags = seoSettings.OpenGraphMetaTags,
+                CustomBodyTags = seoSettings.CustomBodyTags,
                 CustomHeadTags = seoSettings.CustomHeadTags
             };
 

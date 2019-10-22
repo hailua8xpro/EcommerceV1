@@ -23,8 +23,8 @@ namespace Nop.Plugin.ExternalAuth.Facebook.Infrastructure
             {
                 //set credentials
                 var settings = EngineContext.Current.Resolve<FacebookExternalAuthSettings>();
-                options.AppId = settings.ClientKeyIdentifier;
-                options.AppSecret = settings.ClientSecret;
+                options.ClientId = settings.ClientKeyIdentifier;
+                options.ClientSecret = settings.ClientSecret;
 
                 //store access and refresh tokens for the further usage
                 options.SaveTokens = true;

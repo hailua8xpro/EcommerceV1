@@ -226,7 +226,6 @@ namespace Nop.Web.Factories
             var newsItems = _newsService.GetAllNews(_workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id,
                 command.PageNumber - 1, command.PageSize);
             model.PagingFilteringContext.LoadPagedList(newsItems);
-
             model.NewsItems = newsItems
                 .Select(x =>
                 {
