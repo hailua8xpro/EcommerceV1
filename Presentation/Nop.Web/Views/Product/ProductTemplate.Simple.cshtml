@@ -173,3 +173,24 @@
         </div>
     </div>
 </div>
+<script type="application/ld+json" asp-location="Head">
+    {
+    "@@context": "https://schema.org/",
+    "@@type": "Product",
+    "name": "@Model.Name",
+    "image": ["@Model.DefaultPictureModel.ImageUrl"],
+    "description": "@Model.ShortDescription",
+    "offers": {
+    "@@type": "Offer",
+    "url": "https://example.com/anvil",
+    "priceCurrency": "VND",
+    "price": "@Model.ProductPrice.PriceValue",
+    "itemCondition": "https://schema.org/UsedCondition",
+    "availability": "https://schema.org/InStock",
+    "seller": {
+    "@@type": "Organization",
+    "name": "Executive Objects"
+    }
+    }
+    }
+</script>

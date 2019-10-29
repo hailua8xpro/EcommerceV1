@@ -15,14 +15,6 @@
     <div class="breadcrumb">
         <div class="container">
             <ul itemscope itemtype="http://schema.org/BreadcrumbList">
-                <li>
-                    <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
-                    <span class="delimiter">@breadcrumbDelimiter</span>
-                </li>
-                <li>
-                    <a href="@Url.RouteUrl("NewsArchive")">@T("News")</a>
-                    <span class="delimiter">@breadcrumbDelimiter</span>
-                </li>
                 @{ int position = 1; }
                 @foreach (var cat in Model.NewsCategoryBreadcrumb)
                 {
@@ -31,9 +23,6 @@
                         @if (isLastCategory)
                         {
                             <strong class="current-item" itemprop="name">@cat.Name</strong>
-                            <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
-                                  id="@Url.RouteUrl("NewsCategory", new {SeName = cat.SeName})">
-                            </span>
                         }
                         else
                         {

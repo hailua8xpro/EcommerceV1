@@ -425,6 +425,20 @@ ul.main-menu-ul li ul li {
     cursor: pointer;
     line-height: 42px;
 }
+#small-search-box-form .ui-menu .ui-menu-item {
+    border-bottom: solid 1px #c5c5c5;
+}
+    #small-search-box-form .ui-menu .ui-menu-item:last-child {
+        border-bottom: 0;
+    }
+    #small-search-box-form .ui-menu .ui-menu-item a img {
+        margin-right: 7px;
+    }
+#small-search-box-form .ui-menu .ui-menu-item-wrapper {
+    position: relative;
+    padding: 8px 1em 8px .4em;
+    display: block;
+}
 /*#endregion */
 /*#region home page */
 .item-slider .container {

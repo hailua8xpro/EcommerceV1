@@ -21,7 +21,7 @@
                         </li>
                     }
                 <li class="cusadd">
-                    Địa chỉ:
+                    @T("order.address"):
                     @if (Model.BillingAddress.StreetAddressEnabled)
                     {
                         <span>@Model.BillingAddress.Address1</span>
@@ -88,7 +88,7 @@
             }
         </div>
 
-        @if (Model.IsShippable)
+        @*@if (Model.IsShippable)
         {
             <div class="shipping-info-wrap">
                 <div class="shipping-info">
@@ -258,6 +258,6 @@
                     </ul>
                 </div>
             </div>
-        }
+        }*@
     </div>
 }

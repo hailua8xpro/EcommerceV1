@@ -14,7 +14,7 @@
             });
         </script>
     }
-    @*@if (Model.AutoCompleteEnabled)
+    @if (Model.AutoCompleteEnabled)
     {
         <script asp-location="Footer">
             $(document).ready(function() {
@@ -24,7 +24,7 @@
                         delay: 500,
                         minLength: @(Model.SearchTermMinimumLength.ToString()),
                         source: '@(Url.RouteUrl("ProductSearchAutoComplete"))',
-                        appendTo: '.search-box',
+                        appendTo: '#small-search-box-form',
                         select: function(event, ui) {
                             $("#small-searchterms").val(ui.item.label);
                             setLocation(ui.item.producturl);
@@ -51,5 +51,5 @@
                 };
             });
         </script>
-    }*@
+    }
 </form>

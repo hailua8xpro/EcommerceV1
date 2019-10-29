@@ -38,7 +38,7 @@
                         <div class="billing-addresses">
                             @if (Model.ShipToSameAddressAllowed)
                             {
-                                <div class="section ship-to-same-address">
+                                <div class="section ship-to-same-address d-none">
                                     <div class="selector">
                                         <input asp-for="ShipToSameAddress" />
                                         <label asp-for="ShipToSameAddress">@T("Checkout.ShipToSameAddress")</label>

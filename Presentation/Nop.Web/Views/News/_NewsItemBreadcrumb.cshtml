@@ -7,14 +7,6 @@
     <div class="breadcrumb">
         <div class="container">
             <ul itemscope itemtype="http://schema.org/BreadcrumbList">
-                <li>
-                    <span>
-                        <a href="@Url.RouteUrl("Homepage")">
-                            <span>@T("Products.Breadcrumb.Top")</span>
-                        </a>
-                    </span>
-                    <span class="delimiter">@breadcrumbDelimiter</span>
-                </li>
                 @{ int position = 1; }
                 @foreach (var category in Model.NewsCategoryBreadcrumb)
                 {
@@ -30,9 +22,6 @@
 
                 <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                     <strong class="current-item" itemprop="name">@Model.Title</strong>
-                    <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
-                          id="@Url.RouteUrl("NewsItem", new { SeName = Model.SeName })">
-                    </span>
                     <meta itemprop="position" content="@position" />
                 </li>
             </ul>
