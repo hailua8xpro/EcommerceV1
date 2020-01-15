@@ -560,7 +560,7 @@
         /// {1} : current theme
         /// {2} : is connection SSL secured (included in a picture URL)
         /// </remarks>
-        public static string StoreLogoPath => "Nop.pres.logo-{0}-{1}-{2}";
+        public static string StoreLogoPath => "Nop.pres.logo-{0}-{1}";
         public static string StoreLogoPathPrefixCacheKey => "Nop.pres.logo";
 
         /// <summary>
@@ -622,7 +622,7 @@
         /// {2} : widget zone
         /// {3} : current theme name
         /// </remarks>
-        public static string WidgetModelKey => "Nop.pres.widget-{0}-{1}-{2}-{3}";
+        public static string WidgetModelKey => "Nop.pres.widget-{0}-{1}-{2}";
         public static string WidgetPrefixCacheKey => "Nop.pres.widget";
 
     }

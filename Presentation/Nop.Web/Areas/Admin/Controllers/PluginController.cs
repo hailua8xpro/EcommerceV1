@@ -22,7 +22,6 @@ using Nop.Services.Security;
 using Nop.Services.Shipping;
 using Nop.Services.Shipping.Pickup;
 using Nop.Services.Tax;
-using Nop.Services.Themes;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Models.Plugins;
 using Nop.Web.Areas.Admin.Models.Plugins.Marketplace;
@@ -147,58 +146,6 @@ namespace Nop.Web.Areas.Admin.Controllers
             }).ToList();
 
             return Json(models);
-        }
-
-        [HttpPost]
-        public virtual IActionResult UploadPluginsAndThemes(IFormFile archivefile)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManagePlugins))
-                return AccessDeniedView();
-
-            try
-            {
-                if (archivefile == null || archivefile.Length == 0)
-                {
-                    _notificationService.ErrorNotification(_localizationService.GetResource("Admin.Common.UploadFile"));
-                    return RedirectToAction("List");
-                }
-
-                var descriptors = _uploadService.UploadPluginsAndThemes(archivefile);
-                var pluginDescriptors = descriptors.OfType<PluginDescriptor>().ToList();
-                var themeDescriptors = descriptors.OfType<ThemeDescriptor>().ToList();
-
-                //activity log
-                foreach (var descriptor in pluginDescriptors)
-                {
-                    _customerActivityService.InsertActivity("UploadNewPlugin",
-                        string.Format(_localizationService.GetResource("ActivityLog.UploadNewPlugin"), descriptor.FriendlyName));
-                }
-
-                foreach (var descriptor in themeDescriptors)
-                {
-                    _customerActivityService.InsertActivity("UploadNewTheme",
-                        string.Format(_localizationService.GetResource("ActivityLog.UploadNewTheme"), descriptor.FriendlyName));
-                }
-
-                //events
-                if (pluginDescriptors.Any())
-                    _eventPublisher.Publish(new PluginsUploadedEvent(pluginDescriptors));
-
-                if (themeDescriptors.Any())
-                    _eventPublisher.Publish(new ThemesUploadedEvent(themeDescriptors));
-
-                var message = string.Format(_localizationService.GetResource("Admin.Configuration.Plugins.Uploaded"), pluginDescriptors.Count, themeDescriptors.Count);
-                _notificationService.SuccessNotification(message);
-
-                //restart application
-                _webHelper.RestartAppDomain();
-            }
-            catch (Exception exc)
-            {
-                _notificationService.ErrorNotification(exc);
-            }
-
-            return RedirectToAction("List");
         }
 
         [HttpPost, ActionName("List")]

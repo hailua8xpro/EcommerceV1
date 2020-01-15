@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain;
@@ -19,7 +21,6 @@ using Nop.Web.Factories;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Security;
 using Nop.Web.Framework.Security.Captcha;
-using Nop.Web.Framework.Themes;
 using Nop.Web.Models.Common;
 
 namespace Nop.Web.Controllers
@@ -38,7 +39,6 @@ namespace Nop.Web.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly ILogger _logger;
         private readonly IStoreContext _storeContext;
-        private readonly IThemeContext _themeContext;
         private readonly IVendorService _vendorService;
         private readonly IWorkContext _workContext;
         private readonly IWorkflowMessageService _workflowMessageService;
@@ -47,7 +47,7 @@ namespace Nop.Web.Controllers
         private readonly SitemapXmlSettings _sitemapXmlSettings;
         private readonly StoreInformationSettings _storeInformationSettings;
         private readonly VendorSettings _vendorSettings;
-
+        private readonly IHostingEnvironment _hostingEnv;
         #endregion
 
         #region Ctor
@@ -62,7 +62,6 @@ namespace Nop.Web.Controllers
             ILocalizationService localizationService,
             ILogger logger,
             IStoreContext storeContext,
-            IThemeContext themeContext,
             IVendorService vendorService,
             IWorkContext workContext,
             IWorkflowMessageService workflowMessageService,
@@ -70,7 +69,8 @@ namespace Nop.Web.Controllers
             SitemapSettings sitemapSettings,
             SitemapXmlSettings sitemapXmlSettings,
             StoreInformationSettings storeInformationSettings,
-            VendorSettings vendorSettings)
+            VendorSettings vendorSettings,
+            IHostingEnvironment hostingEnv)
         {
             _captchaSettings = captchaSettings;
             _commonSettings = commonSettings;
@@ -82,7 +82,6 @@ namespace Nop.Web.Controllers
             _localizationService = localizationService;
             _logger = logger;
             _storeContext = storeContext;
-            _themeContext = themeContext;
             _vendorService = vendorService;
             _workContext = workContext;
             _workflowMessageService = workflowMessageService;
@@ -91,6 +90,7 @@ namespace Nop.Web.Controllers
             _sitemapXmlSettings = sitemapXmlSettings;
             _storeInformationSettings = storeInformationSettings;
             _vendorSettings = vendorSettings;
+            _hostingEnv = hostingEnv;
         }
 
         #endregion
@@ -307,22 +307,6 @@ namespace Nop.Web.Controllers
 
             return Content(siteMap, "text/xml");
         }
-
-        public virtual IActionResult SetStoreTheme(string themeName, string returnUrl = "")
-        {
-            _themeContext.WorkingThemeName = themeName;
-
-            //home page
-            if (string.IsNullOrEmpty(returnUrl))
-                returnUrl = Url.RouteUrl("Homepage");
-
-            //prevent open redirection attack
-            if (!Url.IsLocalUrl(returnUrl))
-                returnUrl = Url.RouteUrl("Homepage");
-
-            return Redirect(returnUrl);
-        }
-
         [HttpPost]
         //available even when a store is closed
         [CheckAccessClosedStore(true)]
@@ -394,7 +378,77 @@ namespace Nop.Web.Controllers
 
             return Redirect(url);
         }
-
+        ActionResult InitProvince()
+        {
+            //string url = "https://thongtindoanhnghiep.co/api/city";
+            //// GET data from api & map to Poco
+            //string todo = url.GetStringFromUrl();
+            //var phones = JsonSerializer.DeserializeFromString<Fuck>(todo);
+            //if (phones!=null && phones.LtsItem!=null)
+            //{
+            //    foreach (var item in phones.LtsItem)
+            //    {
+            //        StateProvince p = new StateProvince {
+            //            CountryId = 82,
+            //            DisplayOrder = 0,
+            //            Name=item.Title,
+            //            FromApiProvinceId=item.ID
+            //        };
+            //        _stateProvinceService.InsertStateProvince(p);
+            //        //if (item.ID>0)
+            //        //{
+            //        //    string urldis = $"https://thongtindoanhnghiep.co/api/city/{item.ID}/district";
+            //        //}
+            //    }
+            //}
+            //var stateprovinces = _stateProvinceService.GetStateProvinces();
+            //if (stateprovinces.Any())
+            //{
+            //    foreach (var item in stateprovinces)
+            //    {
+            //        string urldis = $"https://thongtindoanhnghiep.co/api/city/{item.FromApiProvinceId}/district";
+            //        string todo2 = urldis.GetStringFromUrl();
+            //        var phones2 = JsonSerializer.DeserializeFromString<List<DisTrictDTO>>(todo2);
+            //        if (phones2!=null && phones2.Any())
+            //        {
+            //            foreach (var item2 in phones2)
+            //            {
+            //                var d = new District { 
+            //                    FromApiDistrictId=item2.ID,
+            //                    Name=item2.Title,
+            //                    Published=true,
+            //                    StateProvinceId=item.Id
+            //                };
+            //                _stateProvinceService.InsertDistrict(d);
+            //            }
+            //        }
+            //    }
+            //}
+            //var district = _stateProvinceService.GetDistricts();
+            //if (district.Any())
+            //{
+            //    foreach (var item in district)
+            //    {
+            //        string urldis = $"https://thongtindoanhnghiep.co/api/district/{item.FromApiDistrictId}/ward";
+            //        string todo2 = urldis.GetStringFromUrl();
+            //        var phones2 = JsonSerializer.DeserializeFromString<List<WardDTO>>(todo2);
+            //        if (phones2 != null && phones2.Any())
+            //        {
+            //            foreach (var item2 in phones2)
+            //            {
+            //                var d = new Ward
+            //                {
+            //                    Name = item2.Title,
+            //                    Published = true,
+            //                    DistrictId = item.Id
+            //                };
+            //                _stateProvinceService.InsertWard(d);
+            //            }
+            //        }
+            //    }
+            //}
+            return View();
+        }
         #endregion
     }
 }

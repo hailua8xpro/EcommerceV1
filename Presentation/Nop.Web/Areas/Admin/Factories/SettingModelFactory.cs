@@ -29,7 +29,6 @@ using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Media;
 using Nop.Services.Stores;
-using Nop.Services.Themes;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Areas.Admin.Models.Common;
 using Nop.Web.Areas.Admin.Models.Settings;
@@ -65,7 +64,6 @@ namespace Nop.Web.Areas.Admin.Factories
         private readonly ISettingService _settingService;
         private readonly IStoreContext _storeContext;
         private readonly IStoreService _storeService;
-        private readonly IThemeProvider _themeProvider;
         private readonly IVendorAttributeModelFactory _vendorAttributeModelFactory;
         private readonly IWorkContext _workContext;
 
@@ -91,7 +89,6 @@ namespace Nop.Web.Areas.Admin.Factories
             ISettingService settingService,
             IStoreContext storeContext,
             IStoreService storeService,
-            IThemeProvider themeProvider,
             IVendorAttributeModelFactory vendorAttributeModelFactory,
             IReviewTypeModelFactory reviewTypeModelFactory,
             IWorkContext workContext)
@@ -114,7 +111,6 @@ namespace Nop.Web.Areas.Admin.Factories
             _settingService = settingService;
             _storeContext = storeContext;
             _storeService = storeService;
-            _themeProvider = themeProvider;
             _vendorAttributeModelFactory = vendorAttributeModelFactory;
             _reviewTypeModelFactory = reviewTypeModelFactory;
             _workContext = workContext;
@@ -150,35 +146,7 @@ namespace Nop.Web.Areas.Admin.Factories
             _baseAdminModelFactory.PrepareStatesAndProvinces(model.AvailableStates, model.CountryId);
         }
 
-        /// <summary>
-        /// Prepare store theme models
-        /// </summary>
-        /// <param name="models">List of store theme models</param>
-        protected virtual void PrepareStoreThemeModels(IList<StoreInformationSettingsModel.ThemeModel> models)
-        {
-            if (models == null)
-                throw new ArgumentNullException(nameof(models));
-
-            //load settings for a chosen store scope
-            var storeId = _storeContext.ActiveStoreScopeConfiguration;
-            var storeInformationSettings = _settingService.LoadSetting<StoreInformationSettings>(storeId);
-
-            //get available themes
-            var availableThemes = _themeProvider.GetThemes();
-            foreach (var theme in availableThemes)
-            {
-                models.Add(new StoreInformationSettingsModel.ThemeModel
-                {
-                    FriendlyName = theme.FriendlyName,
-                    SystemName = theme.SystemName,
-                    PreviewImageUrl = theme.PreviewImageUrl,
-                    PreviewText = theme.PreviewText,
-                    SupportRtl = theme.SupportRtl,
-                    Selected = theme.SystemName.Equals(storeInformationSettings.DefaultStoreTheme, StringComparison.InvariantCultureIgnoreCase)
-                });
-            }
-        }
-
+       
         /// <summary>
         /// Prepare sort option search model
         /// </summary>
@@ -314,8 +282,6 @@ namespace Nop.Web.Areas.Admin.Factories
                 PopupForTermsOfServiceLinks = commonSettings.PopupForTermsOfServiceLinks
             };
 
-            //prepare available themes
-            PrepareStoreThemeModels(model.AvailableStoreThemes);
 
             if (storeId <= 0)
                 return model;

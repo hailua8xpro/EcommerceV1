@@ -29,20 +29,17 @@
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
 
     <Compile Remove="Plugins\**" />
+
+    <Content Remove="Plugins\**" />
     <EmbeddedResource Remove="Plugins\**" />
     <None Remove="Plugins\**" />
 
     <!-- We copy the entire \Plugins and \Themes directories.
 	    But we ignore cshtml and JSON files to avoid "Duplicate 'Content' items were included" error during publishing.
 	    We also can use "CheckForDuplicateItemsContinueOnError" as per https://github.com/dotnet/sdk/blob/master/src/Tasks/Microsoft.NET.Build.Tasks/build/Microsoft.NET.Sdk.DefaultItems.targets -->
-    <Content Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" Exclude="Plugins\**\*.config;Plugins\**\*.cshtml;Plugins\**\*.json" />
-    <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" Exclude="Themes\**\*.config;Themes\**\*.cshtml;Themes\**\*.json" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />
-    <None Remove="Themes\DefaultClean\Content\css\global.css" />
-    <None Remove="Themes\DefaultClean\Content\images\emptycart.png" />
-    <None Remove="Themes\DefaultClean\Content\images\testimonial-bg.jpg" />
 
     <None Update="Areas\Admin\sitemap.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -50,9 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Plugins\Payments.CashOnDelivery\Views\Configure.cshtml" />
-    <None Include="Plugins\Payments.CashOnDelivery\Views\PaymentInfo.cshtml" />
-    <None Include="Plugins\Payments.CashOnDelivery\Views\_ViewImports.cshtml" />
+    <None Include="wwwroot\css\styles.css" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.css.map" />
@@ -67,6 +62,9 @@
     <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.js.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\fontMbi\css\fontMbi.css" />
+    <None Include="wwwroot\lib\fontMbi\fonts\mbicon.woff" />
+    <None Include="wwwroot\lib\fontMbi\fonts\mbicon.woff2" />
     <None Include="wwwroot\lib\jquey-lazyload\jquery.lazy.min.js" />
     <None Include="wwwroot\lib\slick\config.rb" />
     <None Include="wwwroot\lib\slick\fonts\slick.svg" />
@@ -81,6 +79,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="2.2.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="ServiceStack.Text" Version="5.8.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -96,10 +95,6 @@
     <Content Update="Areas\Admin\Views\Banner\_CreateOrUpdate.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Plugins\ExternalAuth.Google\" />
   </ItemGroup>
 
   <!-- This target execute after "Build" target.

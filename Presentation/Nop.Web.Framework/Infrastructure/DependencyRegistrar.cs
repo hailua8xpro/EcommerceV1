@@ -53,11 +53,9 @@ using Nop.Services.Stores;
 using Nop.Services.Tasks;
 using Nop.Services.Tax;
 using Nop.Services.Testimonials;
-using Nop.Services.Themes;
 using Nop.Services.Topics;
 using Nop.Services.Vendors;
 using Nop.Web.Framework.Mvc.Routing;
-using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
 
 namespace Nop.Web.Framework.Infrastructure
@@ -230,8 +228,6 @@ namespace Nop.Web.Framework.Infrastructure
             builder.RegisterType<ImportManager>().As<IImportManager>().InstancePerLifetimeScope();
             builder.RegisterType<PdfService>().As<IPdfService>().InstancePerLifetimeScope();
             builder.RegisterType<UploadService>().As<IUploadService>().InstancePerLifetimeScope();
-            builder.RegisterType<ThemeProvider>().As<IThemeProvider>().InstancePerLifetimeScope();
-            builder.RegisterType<ThemeContext>().As<IThemeContext>().InstancePerLifetimeScope();
             builder.RegisterType<ExternalAuthenticationService>().As<IExternalAuthenticationService>().InstancePerLifetimeScope();
             builder.RegisterType<RoutePublisher>().As<IRoutePublisher>().SingleInstance();
             builder.RegisterType<ReviewTypeService>().As<IReviewTypeService>().SingleInstance();

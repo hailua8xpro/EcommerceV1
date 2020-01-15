@@ -1,30 +1,32 @@
 ﻿@{
     Layout = "_ColumnsOne";
     Html.AppendPageCssClassParts("html-home-page");
+    Html.AppendCssFileParts("~/lib/slick/slick-theme.css");
+    Html.AppendCssFileParts("~/lib/slick/slick.css");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/slick/slick.js");
 }
 
-    <div class="page home-page">
-        @await Component.InvokeAsync("HomepageBanner")
-        <div class="page-body container">
-            @await Component.InvokeAsync("HomepageProducts")
-        </div>
-        @await Component.InvokeAsync("HomepageTestimonials")
-        <div class="bg-gray">
-            <div class="container py-3">
-                @await Component.InvokeAsync("HomepageNews")
-            </div>
+<div class="page home-page">
+    @await Component.InvokeAsync("HomepageBanner")
+    <div class="page-body container">
+        @await Component.InvokeAsync("HomepageProducts")
+    </div>
+    @await Component.InvokeAsync("HomepageTestimonials")
+    <div class="bg-gray">
+        <div class="container py-3">
+            @await Component.InvokeAsync("HomepageNews")
         </div>
     </div>
-    <script type="application/ld+json" asp-location="Head">
-        {
-        "@@context": "https://schema.org",
-        "@@type": "WebSite",
-        "url": "@Url.RouteUrl("Homepage")",
-        "potentialAction": {
-        "@@type": "SearchAction",
-        "target": "@(Url.RouteUrl("ProductSearch")+"?q={search_term_string}")",
-        "query-input": "required name=search_term_string"
-        }
-        }
-    </script>
-   
+</div>
+<script type="application/ld+json" asp-location="Head">
+    {
+    "@@context": "https://schema.org",
+    "@@type": "WebSite",
+    "url": "@Url.RouteUrl("Homepage")",
+    "potentialAction": {
+    "@@type": "SearchAction",
+    "target": "@(Url.RouteUrl("ProductSearch") + "?q={search_term_string}")",
+    "query-input": "required name=search_term_string"
+    }
+    }
+</script>

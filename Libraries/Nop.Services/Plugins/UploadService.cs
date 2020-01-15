@@ -10,7 +10,6 @@ using Newtonsoft.Json.Converters;
 using Nop.Core;
 using Nop.Core.Infrastructure;
 using Nop.Services.Common;
-using Nop.Services.Themes;
 
 namespace Nop.Services.Plugins
 {
@@ -23,19 +22,16 @@ namespace Nop.Services.Plugins
 
         private readonly INopFileProvider _fileProvider;
         private readonly IStoreContext _storeContext;
-        private readonly IThemeProvider _themeProvider;
 
         #endregion
 
         #region Ctor
 
         public UploadService(INopFileProvider fileProvider,
-            IStoreContext storeContext,
-            IThemeProvider themeProvider)
+            IStoreContext storeContext)
         {
             _fileProvider = fileProvider;
             _storeContext = storeContext;
-            _themeProvider = themeProvider;
         }
 
         #endregion
@@ -124,10 +120,7 @@ namespace Nop.Services.Plugins
                                     throw new Exception($"This plugin doesn't support the current version - {NopVersion.CurrentVersion}");
                             }
 
-                            //or whether a theme is upload 
-                            if (isThemeDescriptor)
-                                descriptor = _themeProvider.GetThemeDescriptorFromText(reader.ReadToEnd());
-
+                          
                             break;
                         }
                     }
@@ -211,9 +204,6 @@ namespace Nop.Services.Plugins
                             if (item.Type == UploadedItemType.Plugin)
                                 descriptor = PluginDescriptor.GetPluginDescriptorFromText(reader.ReadToEnd());
 
-                            //or whether a theme is upload 
-                            if (item.Type == UploadedItemType.Theme)
-                                descriptor = _themeProvider.GetThemeDescriptorFromText(reader.ReadToEnd());
                         }
                     }
 

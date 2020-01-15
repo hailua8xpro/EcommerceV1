@@ -89,12 +89,6 @@ namespace Nop.Web.Factories
         string PrepareSitemapXml( int? id);
 
         /// <summary>
-        /// Prepare the store theme selector model
-        /// </summary>
-        /// <returns>Store theme selector model</returns>
-        StoreThemeSelectorModel PrepareStoreThemeSelectorModel();
-
-        /// <summary>
         /// Prepare the favicon model
         /// </summary>
         /// <returns>Favicon model</returns>

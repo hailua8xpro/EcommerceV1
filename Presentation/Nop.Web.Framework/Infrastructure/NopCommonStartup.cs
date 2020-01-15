@@ -42,9 +42,6 @@ namespace Nop.Web.Framework.Infrastructure
 
             //add localization
             services.AddLocalization();
-
-            //add theme support
-            services.AddThemes();
         }
 
         /// <summary>

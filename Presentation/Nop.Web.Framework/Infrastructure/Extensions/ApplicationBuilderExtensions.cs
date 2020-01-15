@@ -192,15 +192,6 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
 
             //common static files
             application.UseStaticFiles(new StaticFileOptions { OnPrepareResponse = staticFileResponse });
-
-            //themes static files
-            application.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(fileProvider.MapPath(@"Themes")),
-                RequestPath = new PathString("/Themes"),
-                OnPrepareResponse = staticFileResponse
-            });
-
             //plugins static files
             var staticFileOptions = new StaticFileOptions
             {

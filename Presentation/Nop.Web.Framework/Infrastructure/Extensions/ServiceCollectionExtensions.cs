@@ -37,7 +37,6 @@ using Nop.Services.Tasks;
 using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Framework.Security.Captcha;
-using Nop.Web.Framework.Themes;
 using StackExchange.Profiling.Storage;
 using WebMarkupMin.AspNetCore2;
 using WebMarkupMin.NUglify;
@@ -168,23 +167,6 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                     ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.None;
             });
         }
-
-        /// <summary>
-        /// Adds services required for themes support
-        /// </summary>
-        /// <param name="services">Collection of service descriptors</param>
-        public static void AddThemes(this IServiceCollection services)
-        {
-            if (!DataSettingsManager.DatabaseIsInstalled)
-                return;
-
-            //themes support
-            services.Configure<RazorViewEngineOptions>(options =>
-            {
-                options.ViewLocationExpanders.Add(new ThemeableViewLocationExpander());
-            });
-        }
-
         /// <summary>
         /// Adds data protection services
         /// </summary>

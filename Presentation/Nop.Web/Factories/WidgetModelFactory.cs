@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Services.Cms;
-using Nop.Web.Framework.Themes;
 using Nop.Web.Infrastructure.Cache;
 using Nop.Web.Models.Cms;
 
@@ -19,7 +18,6 @@ namespace Nop.Web.Factories
 
         private readonly IStaticCacheManager _cacheManager;
         private readonly IStoreContext _storeContext;
-        private readonly IThemeContext _themeContext;
         private readonly IWidgetPluginManager _widgetPluginManager;
         private readonly IWorkContext _workContext;
 
@@ -29,13 +27,11 @@ namespace Nop.Web.Factories
 
         public WidgetModelFactory(IStaticCacheManager cacheManager,
             IStoreContext storeContext,
-            IThemeContext themeContext,
             IWidgetPluginManager widgetPluginManager,
             IWorkContext workContext)
         {
             _cacheManager = cacheManager;
             _storeContext = storeContext;
-            _themeContext = themeContext;
             _widgetPluginManager = widgetPluginManager;
             _workContext = workContext;
         }
@@ -53,7 +49,7 @@ namespace Nop.Web.Factories
         public virtual List<RenderWidgetModel> PrepareRenderWidgetModel(string widgetZone, object additionalData = null)
         {
             var cacheKey = string.Format(NopModelCacheDefaults.WidgetModelKey,
-                _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id, widgetZone, _themeContext.WorkingThemeName);
+                _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id, widgetZone);
 
             var cachedModels = _cacheManager.Get(cacheKey, () =>
                 _widgetPluginManager.LoadActivePlugins(_workContext.CurrentCustomer, _storeContext.CurrentStore.Id, widgetZone)

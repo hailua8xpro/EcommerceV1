@@ -39,6 +39,7 @@ namespace Nop.Core.Domain.Directory
         /// Gets or sets the country
         /// </summary>
         public virtual Country Country { get; set; }
+        public int FromApiProvinceId { get; set; }
         public virtual ICollection<District> Districts
         {
             get => _districts ?? (_districts = new List<District>());

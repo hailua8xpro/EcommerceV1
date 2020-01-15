@@ -34,9 +34,7 @@ using Nop.Services.News;
 using Nop.Services.Orders;
 using Nop.Services.Security;
 using Nop.Services.Seo;
-using Nop.Services.Themes;
 using Nop.Services.Topics;
-using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
 using Nop.Web.Infrastructure.Cache;
 using Nop.Web.Models.Common;
@@ -79,8 +77,6 @@ namespace Nop.Web.Factories
         private readonly ISitemapGenerator _sitemapGenerator;
         private readonly IStaticCacheManager _cacheManager;
         private readonly IStoreContext _storeContext;
-        private readonly IThemeContext _themeContext;
-        private readonly IThemeProvider _themeProvider;
         private readonly ITopicService _topicService;
         private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IUrlRecordService _urlRecordService;
@@ -127,8 +123,6 @@ namespace Nop.Web.Factories
             ISitemapGenerator sitemapGenerator,
             IStaticCacheManager cacheManager,
             IStoreContext storeContext,
-            IThemeContext themeContext,
-            IThemeProvider themeProvider,
             ITopicService topicService,
             IUrlHelperFactory urlHelperFactory,
             IUrlRecordService urlRecordService,
@@ -171,8 +165,6 @@ namespace Nop.Web.Factories
             _sitemapGenerator = sitemapGenerator;
             _cacheManager = cacheManager;
             _storeContext = storeContext;
-            _themeContext = themeContext;
-            _themeProvider = themeProvider;
             _topicService = topicService;
             _urlHelperFactory = urlHelperFactory;
             _urlRecordService = urlRecordService;
@@ -228,7 +220,7 @@ namespace Nop.Web.Factories
                 StoreName = _localizationService.GetLocalized(_storeContext.CurrentStore, x => x.Name)
             };
 
-            var cacheKey = string.Format(NopModelCacheDefaults.StoreLogoPath, _storeContext.CurrentStore.Id, _themeContext.WorkingThemeName, _webHelper.IsCurrentConnectionSecured());
+            var cacheKey = string.Format(NopModelCacheDefaults.StoreLogoPath, _storeContext.CurrentStore.Id, _webHelper.IsCurrentConnectionSecured());
             model.LogoPath = _cacheManager.Get(cacheKey, () =>
             {
                 var logo = "";
@@ -242,7 +234,7 @@ namespace Nop.Web.Factories
                     //use default logo
                     var pathBase = _httpContextAccessor.HttpContext.Request.PathBase.Value ?? string.Empty ;
                     var storeLocation = _mediaSettings.UseAbsoluteImagePath ? _webHelper.GetStoreLocation() : $"{pathBase}/";
-                    logo = $"{storeLocation}Themes/{_themeContext.WorkingThemeName}/Content/images/logo.png";
+                    logo = $"{storeLocation}images/logo.png";
                 }
                 return logo;
             });
@@ -742,30 +734,6 @@ namespace Nop.Web.Factories
                 _storeContext.CurrentStore.Id);
             var siteMap = _cacheManager.Get(cacheKey, () => _sitemapGenerator.Generate(id));
             return siteMap;
-        }
-
-        /// <summary>
-        /// Prepare the store theme selector model
-        /// </summary>
-        /// <returns>Store theme selector model</returns>
-        public virtual StoreThemeSelectorModel PrepareStoreThemeSelectorModel()
-        {
-            var model = new StoreThemeSelectorModel();
-
-            var currentTheme = _themeProvider.GetThemeBySystemName(_themeContext.WorkingThemeName);
-            model.CurrentStoreTheme = new StoreThemeModel
-            {
-                Name = currentTheme?.SystemName,
-                Title = currentTheme?.FriendlyName
-            };
-
-            model.AvailableStoreThemes = _themeProvider.GetThemes().Select(x => new StoreThemeModel
-            {
-                Name = x.SystemName,
-                Title = x.FriendlyName
-            }).ToList();
-
-            return model;
         }
 
         /// <summary>

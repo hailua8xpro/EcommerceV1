@@ -16,15 +16,8 @@
 <div class="breadcrumb">
     <div class="container">
         <ul itemscope itemtype="http://schema.org/BreadcrumbList">
-            <li>
-                <a href="@Url.RouteUrl("Homepage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
-                <span class="delimiter">@breadcrumbDelimiter</span>
-            </li>
             <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                 <strong class="current-item" itemprop="name">Địa  chỉ giao hàng</strong>
-                <span itemprop="item" itemscope itemtype="http://schema.org/Thing"
-                      id="@(Url.RouteUrl("ShoppingCart"))">
-                </span>
             </li>
         </ul>
     </div>
