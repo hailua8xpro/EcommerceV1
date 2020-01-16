@@ -321,14 +321,14 @@ namespace Nop.Web.Factories
                         if (finalPriceWithoutDiscountBase != finalPriceWithDiscountBase)
                             strikeThroughPrice = finalPriceWithoutDiscount;
 
-                        if(strikeThroughPrice > decimal.Zero)
+                        if (strikeThroughPrice > decimal.Zero)
                             priceModel.OldPrice = _priceFormatter.FormatPrice(strikeThroughPrice);
 
                         priceModel.Price = _priceFormatter.FormatPrice(finalPriceWithDiscount);
                         priceModel.PriceValue = finalPriceWithDiscount;
-                        if (finalPriceWithDiscount>0 && finalPriceWithDiscount < strikeThroughPrice)
+                        if (finalPriceWithDiscount > 0 && finalPriceWithDiscount < strikeThroughPrice)
                         {
-                            priceModel.DifferencePricePercent =Convert.ToInt32((strikeThroughPrice - finalPriceWithDiscount) / strikeThroughPrice*100);
+                            priceModel.DifferencePricePercent = Convert.ToInt32((strikeThroughPrice - finalPriceWithDiscount) / strikeThroughPrice * 100);
                         }
                     }
 
@@ -417,7 +417,7 @@ namespace Nop.Web.Factories
                     var finalPrice = _currencyService.ConvertFromPrimaryStoreCurrency(finalPriceBase, _workContext.WorkingCurrency);
 
                     priceModel.OldPrice = null;
-                    priceModel.Price = string.Format(_localizationService.GetResource("Products.PriceRangeFrom"),_priceFormatter.FormatPrice(finalPrice));
+                    priceModel.Price = string.Format(_localizationService.GetResource("Products.PriceRangeFrom"), _priceFormatter.FormatPrice(finalPrice));
                     priceModel.PriceValue = finalPrice;
 
                     //PAngV default baseprice (used in Germany)
@@ -535,8 +535,8 @@ namespace Nop.Web.Factories
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
 
-            var productTagsCacheKey = string.Format(NopModelCacheDefaults.ProductTagByProductModelKey, 
-                product.Id, 
+            var productTagsCacheKey = string.Format(NopModelCacheDefaults.ProductTagByProductModelKey,
+                product.Id,
                 _workContext.WorkingLanguage.Id,
                 string.Join(",", _workContext.CurrentCustomer.GetCustomerRoleIds()),
                 _storeContext.CurrentStore.Id);
@@ -1744,32 +1744,38 @@ namespace Nop.Web.Factories
                 }).ToList()
             );
         }
-       public IList<HomePageProductModel> PrepareHomePageProductModel()
+        public IList<HomePageProductModel> PrepareHomePageProductModel()
         {
-            var result = new List<HomePageProductModel>();
-            var rootcate = _categoryService.GetRootCategories();
-            if (rootcate!=null && rootcate.Any())
+            var cacheKey = NopModelCacheDefaults.HomepageProductModelKey;
+            return _cacheManager.Get(cacheKey, () =>
             {
-                foreach (var cate in rootcate)
+                var result = new List<HomePageProductModel>();
+                var rootcate = _categoryService.GetRootCategories();
+                if (rootcate != null && rootcate.Any())
                 {
-                    var childCate = _categoryService.GetAllCategoriesByParentCategoryId(cate.Id).Select(c=>new CategoryModel {Name=c.Name,SeName= _urlRecordService.GetSeName(c) });
-                    var products = _productService.SearchProducts(
-                       categoryIds: new List<int> { cate.Id }).Where(x=>x.ShowOnHomepage);
-                    var productOverViewModels = PrepareProductOverviewModels(products, true, true, _mediaSettings.ProductThumbPictureSize);
-                    var model = new HomePageProductModel
+                    foreach (var cate in rootcate)
                     {
-                        CategoryModel=new CategoryModel {
-                            Description=cate.Description,
-                            Name=cate.Name,
-                            SeName= _urlRecordService.GetSeName(cate)
-                        },
-                        Products= productOverViewModels,
-                        ChildCategory= childCate
-                    };
-                    result.Add(model);
+                        var childCate = _categoryService.GetAllCategoriesByParentCategoryId(cate.Id).Select(c => new CategoryModel { Name = c.Name, SeName = _urlRecordService.GetSeName(c) });
+                        var products = _productService.SearchProducts(
+                           categoryIds: new List<int> { cate.Id }).Where(x => x.ShowOnHomepage);
+                        var productOverViewModels = PrepareProductOverviewModels(products, true, true, _mediaSettings.ProductThumbPictureSize);
+                        var model = new HomePageProductModel
+                        {
+                            CategoryModel = new CategoryModel
+                            {
+                                Description = cate.Description,
+                                Name = cate.Name,
+                                SeName = _urlRecordService.GetSeName(cate)
+                            },
+                            Products = productOverViewModels,
+                            ChildCategory = childCate
+                        };
+                        result.Add(model);
+                    }
                 }
-            }
-            return result;
+                return result;
+            });
+
         }
 
         #endregion

@@ -4,9 +4,6 @@
 @inject SeoSettings seoSettings
 @{
     Layout = "_ColumnsOne";
-    Html.AppendCssFileParts("~/lib/slick/slick-theme.css");
-    Html.AppendCssFileParts("~/lib/slick/slick.css");
-    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/slick/slick.js");
     //title
     Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
     //meta

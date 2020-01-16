@@ -14,12 +14,15 @@
 @inject StoreInformationSettings storeInformationSettings
 @inject Nop.Services.Localization.ILanguageService languageService
 @{
+    Html.AppendCssFileParts("~/lib/slick/slick-theme.css");
+    Html.AppendCssFileParts("~/lib/slick/slick.css");
     Html.AppendCssFileParts("~/lib/magnific-popup/magnific-popup.css");
     Html.AppendCssFileParts($"~/lib/fontMbi/css/fontMbi.css");
     Html.AppendCssFileParts($"~/css/global.css");
     Html.AppendCssFileParts($"~/css/styles.css");
     Html.AppendCssFileParts("~/lib/jquery-ui-1.12.1.custom/jquery-ui.min.css");
     Html.AppendCssFileParts("~/lib/bootstrap-4.3.1/css/bootstrap.css");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/slick/slick.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.countryselect.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.ajaxcart.js");
     Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.global.js");

@@ -551,7 +551,6 @@ namespace Nop.Web.Framework.UI
                 //use setting if no value is specified
                 bundleFiles = _commonSettings.EnableCssBundling;
             }
-
             //CSS bundling is not allowed in virtual directories
             if (urlHelper.ActionContext.HttpContext.Request.PathBase.HasValue)
                 bundleFiles = false;

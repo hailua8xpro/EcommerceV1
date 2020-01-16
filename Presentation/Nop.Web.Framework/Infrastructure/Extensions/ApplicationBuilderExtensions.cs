@@ -180,9 +180,6 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
         {
             void staticFileResponse(StaticFileResponseContext context)
             {
-                if (!DataSettingsManager.DatabaseIsInstalled)
-                    return;
-
                 var commonSettings = EngineContext.Current.Resolve<CommonSettings>();
                 if (!string.IsNullOrEmpty(commonSettings.StaticFilesCacheControl))
                     context.Context.Response.Headers.Append(HeaderNames.CacheControl, commonSettings.StaticFilesCacheControl);
@@ -199,25 +196,21 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 RequestPath = new PathString("/Plugins"),
                 OnPrepareResponse = staticFileResponse
             };
-
-            if (DataSettingsManager.DatabaseIsInstalled)
+            var securitySettings = EngineContext.Current.Resolve<SecuritySettings>();
+            if (!string.IsNullOrEmpty(securitySettings.PluginStaticFileExtensionsBlacklist))
             {
-                var securitySettings = EngineContext.Current.Resolve<SecuritySettings>();
-                if (!string.IsNullOrEmpty(securitySettings.PluginStaticFileExtensionsBlacklist))
+                var fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
+
+                foreach (var ext in securitySettings.PluginStaticFileExtensionsBlacklist
+                    .Split(';', ',')
+                    .Select(e => e.Trim().ToLower())
+                    .Select(e => $"{(e.StartsWith(".") ? string.Empty : ".")}{e}")
+                    .Where(fileExtensionContentTypeProvider.Mappings.ContainsKey))
                 {
-                    var fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
-
-                    foreach (var ext in securitySettings.PluginStaticFileExtensionsBlacklist
-                        .Split(';', ',')
-                        .Select(e => e.Trim().ToLower())
-                        .Select(e => $"{(e.StartsWith(".") ? string.Empty : ".")}{e}")
-                        .Where(fileExtensionContentTypeProvider.Mappings.ContainsKey))
-                    {
-                        fileExtensionContentTypeProvider.Mappings.Remove(ext);
-                    }
-
-                    staticFileOptions.ContentTypeProvider = fileExtensionContentTypeProvider;
+                    fileExtensionContentTypeProvider.Mappings.Remove(ext);
                 }
+
+                staticFileOptions.ContentTypeProvider = fileExtensionContentTypeProvider;
             }
 
             application.UseStaticFiles(staticFileOptions);
@@ -244,16 +237,12 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 RequestPath = "/icons",
                 ContentTypeProvider = provider
             });
-
-            if (DataSettingsManager.DatabaseIsInstalled)
+            application.UseStaticFiles(new StaticFileOptions
             {
-                application.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new RoxyFilemanProvider(fileProvider.GetAbsolutePath(NopRoxyFilemanDefaults.DefaultRootDirectory.TrimStart('/').Split('/'))),
-                    RequestPath = new PathString(NopRoxyFilemanDefaults.DefaultRootDirectory),
-                    OnPrepareResponse = staticFileResponse
-                });
-            }
+                FileProvider = new RoxyFilemanProvider(fileProvider.GetAbsolutePath(NopRoxyFilemanDefaults.DefaultRootDirectory.TrimStart('/').Split('/'))),
+                RequestPath = new PathString(NopRoxyFilemanDefaults.DefaultRootDirectory),
+                OnPrepareResponse = staticFileResponse
+            });
         }
 
         /// <summary>

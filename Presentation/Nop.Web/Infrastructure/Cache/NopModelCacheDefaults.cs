@@ -297,6 +297,7 @@
         /// </remarks>
         public static string HomepageBestsellersIdsKey => "Nop.pres.bestsellers.homepage-{0}";
         public static string HomepageBestsellersIdsPrefixCacheKey => "Nop.pres.bestsellers.homepage";
+        public static string HomepageProductModelKey => "Nop.pres.product.homepage";
 
         /// <summary>
         /// Key for "also purchased" product identifiers displayed on the product details page

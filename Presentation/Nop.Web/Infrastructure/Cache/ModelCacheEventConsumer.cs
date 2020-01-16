@@ -369,6 +369,7 @@ namespace Nop.Web.Infrastructure.Cache
         public void HandleEvent(EntityInsertedEvent<Product> eventMessage)
         {
             _cacheManager.RemoveByPrefix(NopModelCacheDefaults.SitemapPrefixCacheKey);
+            _cacheManager.RemoveByPrefix(NopModelCacheDefaults.HomepageProductModelKey);
         }
         public void HandleEvent(EntityUpdatedEvent<Product> eventMessage)
         {
@@ -378,6 +379,7 @@ namespace Nop.Web.Infrastructure.Cache
             _cacheManager.RemoveByPrefix(NopModelCacheDefaults.SitemapPrefixCacheKey);
             _cacheManager.RemoveByPrefix(string.Format(NopModelCacheDefaults.ProductReviewsPrefixCacheKeyById, eventMessage.Entity.Id));
             _cacheManager.RemoveByPrefix(NopModelCacheDefaults.ProductTagByProductPrefixCacheKey);
+            _cacheManager.RemoveByPrefix(NopModelCacheDefaults.HomepageProductModelKey);
         }
         public void HandleEvent(EntityDeletedEvent<Product> eventMessage)
         {
@@ -385,6 +387,7 @@ namespace Nop.Web.Infrastructure.Cache
             _cacheManager.RemoveByPrefix(NopModelCacheDefaults.ProductsAlsoPurchasedIdsPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopModelCacheDefaults.ProductsRelatedIdsPrefixCacheKey);
             _cacheManager.RemoveByPrefix(NopModelCacheDefaults.SitemapPrefixCacheKey);
+            _cacheManager.RemoveByPrefix(NopModelCacheDefaults.HomepageProductModelKey);
         }
 
         //product tags
